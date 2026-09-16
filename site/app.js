@@ -274,7 +274,7 @@ function renderQ([src, text, mod]) {
 
 const WEEK1 = {
   title: 'I had no idea what to expect',
-  note: 'I was thrown in the deep end — but of course I also had a floaty (my Claude subscription), so it was all good.',
+  note: 'I was thrown in the deep end — in a good way of course, thanks to my floaty (Claude subscription).',
   qs: [
     ['google',  'what is a repository'],
     ['google',  'what is an ATS'],

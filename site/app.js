@@ -229,13 +229,13 @@ const WEEK1 = {
   qs: [
     ['google',  'what is a repository'],
     ['google',  'what is an ATS'],
+    ['claude',  'explain what this company actually sells, like i am five'],
     ['google',  'what is a recruitment agency'],
     ['claude',  'what does Kevin mean by <em>this</em>'],
     ['google',  'what is an API'],
     ['google',  'tech bro words i can use to sound like i know things'],
     ['chatgpt', 'how do i clone a repo'],
     ['google',  'what is a CRM'],
-    ['claude',  'explain what this company actually sells, like i am five'],
     ['chatgpt', 'what is a JSON file'],
     ['google',  'what does GTM stand for'],
     ['claude',  'is it normal to understand absolutely nothing on day three', 'punch'],
@@ -243,7 +243,7 @@ const WEEK1 = {
 };
 
 const WEEK2 = {
-  title: "Now I'm a pro. At Claude, and at Spott.",
+  title: "By now I'm a pro…",
   note: 'Two weeks in, I had opinions — and put both Spott and Claude to work.',
   beats: [
     {

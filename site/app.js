@@ -16,17 +16,16 @@ const CONFIG = {
   gateEnabled: true,
 
   /* The one moment, same for everyone.
-     Wed 16 Sep 2026, 18:35 Brussels (CEST = UTC+2) → 16:35 UTC.
+     Wed 16 Sep 2026, 18:45 Brussels (CEST = UTC+2) → 16:45 UTC.
      Change this one line to move the unlock.                     */
-  unlockAt: '2026-09-16T16:35:00Z',
+  unlockAt: '2026-09-16T16:45:00Z',
 
   /* TEST WINDOW — the front door is simply open until this moment, so
-     the whole guest flow can be walked through end to end. At 23:00
-     tonight this stops applying by itself and the unlockAt rule above
-     is the only thing in charge again. Delete this line to end the
-     window early; nothing else depends on it.
-     Wed 16 Sep 2026, 23:00 Brussels (CEST = UTC+2) → 21:00 UTC.       */
-  testUntil: '2026-09-16T21:00:00Z',
+     the whole guest flow can be walked through end to end. It shuts at
+     18:30 by itself, leaving fifteen quiet minutes before the real
+     unlock at 18:45. Her own code keeps working either way.
+     Wed 16 Sep 2026, 18:30 Brussels (CEST = UTC+2) → 16:30 UTC.       */
+  testUntil: '2026-09-16T16:30:00Z',
 
   /* The codes themselves are NOT in this file. These are SHA-256 of the
      normalised codes, so reading the source doesn't hand them over.

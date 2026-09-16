@@ -17,9 +17,6 @@ const CONFIG = {
   /* Front-door passcode. Matching is forgiving: case, spaces
      and punctuation are all ignored.                             */
   passcode: 'debora the intern',
-
-  /* PBKDF2 rounds for the personal codes. Must match tools/make-vault.mjs. */
-  kdfIterations: 1000000,
 };
 
 /* ─────────── tiny helpers ─────────── */
@@ -27,7 +24,6 @@ const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const pad = n => String(n).padStart(2, '0');
 const softMatch = s => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-const normCode  = s => s.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
 /* ══════════════════════════════════════════════════
    1. THE GATE
@@ -160,7 +156,6 @@ function revealSite(autoplayAudio) {
   wireAudio(autoplayAudio);
   buildWeeks();
   observeAll();
-  loadVault();
 }
 
 function enterSite() {
@@ -230,7 +225,6 @@ const WEEK1 = {
     ['google',  'what is a repository'],
     ['google',  'what is an ATS'],
     ['claude',  'explain what this company actually sells, like i am five'],
-    ['google',  'what is a recruitment agency'],
     ['claude',  'what does Kevin mean by <em>this</em>'],
     ['google',  'what is an API'],
     ['google',  'tech bro words i can use to sound like i know things'],
@@ -244,7 +238,7 @@ const WEEK1 = {
 
 const WEEK2 = {
   title: "By now I'm a pro…",
-  note: 'Two weeks in, I had opinions — and put both Spott and Claude to work.',
+  note: '…at both using Spott and Claude.',
   beats: [
     {
       img: 'assets/img/valuation.jpg',
@@ -360,8 +354,34 @@ function observeAll() {
 
   wireQueries();
   wireStills();
+  wireClips();
   wireReveal();
   wireBlur();
+}
+
+/* ─────────── the before/after clips ───────────
+   They're big files, so nothing is fetched until the pair is
+   actually on screen. Then they load, loop and play themselves;
+   scroll away and they pause so two videos aren't running for
+   nothing. Sound stays off — the audio track is the page's job. */
+function wireClips() {
+  const clips = $$('.ba-clip');
+  if (!clips.length) return;
+
+  const play = (v) => {
+    if (!v.src) { v.src = v.dataset.src; v.preload = 'auto'; v.load(); }
+    const p = v.play();
+    if (p) p.catch(() => {});   // browser said no; the controls still work
+  };
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) play(e.target);
+      else if (e.target.src) e.target.pause();
+    });
+  }, { threshold: .35 });
+
+  clips.forEach(v => { v.muted = true; obs.observe(v); });
 }
 
 /* The welcome-video stills may not be in the folder yet — don't show a broken image. */
@@ -464,121 +484,7 @@ window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 /* ══════════════════════════════════════════════════
-   3. THE VAULT  —  one encrypted message per person
-   ──────────────────────────────────────────────────
-   vault.json holds nothing but salt + ciphertext. No names,
-   no hints, no list of who's in it. The only way a message
-   comes out is if someone types the code that decrypts it.
-   ══════════════════════════════════════════════════ */
-
-let VAULT = null;
-async function loadVault() {
-  try {
-    const r = await fetch('data/vault.json', { cache: 'no-store' });
-    if (r.ok) VAULT = await r.json();
-  } catch { /* the form will say so */ }
-}
-
-const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-
-async function deriveKey(code, saltB64, iterations) {
-  const base = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(code), 'PBKDF2', false, ['deriveKey']
-  );
-  return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt: b64(saltB64), iterations, hash: 'SHA-256' },
-    base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
-  );
-}
-
-async function tryUnlock(rawCode) {
-  const code = normCode(rawCode);
-  if (!code) return null;
-  if (!VAULT || !VAULT.records?.length) throw new Error('novault');
-
-  const key = await deriveKey(code, VAULT.salt, VAULT.iterations || CONFIG.kdfIterations);
-  const dec = new TextDecoder();
-
-  for (const rec of VAULT.records) {
-    try {
-      const plain = await crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv: b64(rec.iv) }, key, b64(rec.ct)
-      );
-      return JSON.parse(dec.decode(plain));      // auth tag passed → this is the one
-    } catch { /* not this record, keep going */ }
-  }
-  return null;
-}
-
-const form   = $('#code-form');
-const status = $('#code-status');
-const btn    = $('#code-btn');
-
-form.addEventListener('submit', async e => {
-  e.preventDefault();
-  const raw = $('#code-input').value;
-  if (!normCode(raw)) return;
-
-  btn.disabled = true;
-  status.classList.remove('err');
-  status.textContent = 'opening…';
-
-  let found = null, failed = false;
-  try { found = await tryUnlock(raw); }
-  catch { failed = true; }
-
-  btn.disabled = false;
-
-  if (failed) {
-    status.classList.add('err');
-    status.textContent = "the messages haven't been loaded yet — give it a second and try again.";
-    return;
-  }
-  if (!found) {
-    status.classList.add('err');
-    status.textContent = "that code isn't on the list yet. text me and I'll write you one — I mean that.";
-    $('#letter').hidden = true;
-    return;
-  }
-
-  status.textContent = '';
-  showLetter(found);
-});
-
-function showLetter({ name, message }) {
-  const card = $('#letter');
-  $('#letter-name').textContent = name || 'you';
-  const body = $('#letter-body');
-  body.innerHTML = '';
-  card.hidden = false;
-  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-  /* type it out, paragraph by paragraph */
-  const paras = String(message).split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    body.innerHTML = paras.map(p => `<p></p>`).join('');
-    $$('p', body).forEach((el, i) => el.textContent = paras[i]);
-    return;
-  }
-
-  let pi = 0;
-  (function nextPara() {
-    if (pi >= paras.length) return;
-    const el = document.createElement('p');
-    body.appendChild(el);
-    const text = paras[pi++];
-    let ci = 0;
-    (function char() {
-      el.textContent = text.slice(0, ++ci);
-      if (ci < text.length) setTimeout(char, 16);
-      else setTimeout(nextPara, 240);
-    })();
-  })();
-}
-
-
-/* ══════════════════════════════════════════════════
-   4. BOOT
+   3. BOOT
    Declared last so everything above it exists.
    ══════════════════════════════════════════════════ */
 

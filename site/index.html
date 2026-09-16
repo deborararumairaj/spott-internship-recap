@@ -94,7 +94,7 @@
           </h1>
 
           <div class="bub bub-olive bub-up bub-hero">
-            <span>Today is my last day, and I wanted to tell you all about my experience.</span>
+            <span>Today is my last day, and I wanted to tell you all about my awesome experience interning here!</span>
           </div>
         </div>
 
@@ -131,7 +131,8 @@
           <div class="reveal-bubs">
             <div class="bub bub-pink bub-up">
               <b>This photo is the reason I got the internship</b>
-              <span>Definitely not a referral, or the founders' judgement. PS: this method of internship application is patented, so please pay royalties if you use it. You pay extra if you use AI to generate the image instead of Photoshop.</span>
+              <span>…definitely not a referral, or the founders' judgement.</span>
+              <i class="bub-ps">PS: this method of internship application is patented, so please pay royalties if you use it. You pay double if you use AI to generate the image instead of Photoshop ;)</i>
             </div>
           </div>
         </div>
@@ -165,8 +166,8 @@
       <p class="work-lede">Well boy am I <em>GLAD</em> you asked.</p>
 
       <div class="bub bub-blue bub-up work-lead">
-        <b>The big one was onboarding</b>
-        <span>Especially for all of our auto-onboarders.</span>
+        <b>TL;DR: a lot of onboarding work</b>
+        <span>Especially auto-onboarding, and manuals for existing clients.</span>
       </div>
 
       <ol class="big3">
@@ -179,11 +180,15 @@
             <div class="ba">
               <div class="ba-item">
                 <p class="ba-label">Before — Notion</p>
-                <video src="assets/video/notion.mp4" preload="none" controls playsinline muted></video>
+                <video class="ba-clip" data-src="assets/video/notion.mp4" preload="none"
+                       muted loop playsinline controls disablepictureinpicture
+                       controlslist="nodownload noplaybackrate"></video>
               </div>
               <div class="ba-item">
                 <p class="ba-label">After — Mintlify</p>
-                <video src="assets/video/mintlify.mp4" preload="none" controls playsinline muted></video>
+                <video class="ba-clip" data-src="assets/video/mintlify.mp4" preload="none"
+                       muted loop playsinline controls disablepictureinpicture
+                       controlslist="nodownload noplaybackrate"></video>
               </div>
             </div>
           </div>
@@ -246,43 +251,55 @@
     </div>
   </section>
 
-  <!-- ── RECEIPTS ── -->
-  <section class="sec sec-receipts">
+  <!-- ── WHAT I LEARNED ── -->
+  <section class="sec sec-learn" id="learn">
     <div class="wrap">
-      <h2 class="sec-title">Receipts</h2>
-      <div class="receipts">
-        <figure class="receipt"><img src="assets/img/kevin-mcp.jpg" alt="Kevin: but once you get the hang of MCP and API keys, your ai capabilities will 10x" loading="lazy"><figcaption>Week 3, and he was right.</figcaption></figure>
-        <figure class="receipt"><img src="assets/img/seat-upgraded.jpg" alt="Your seat was upgraded — you now have more Claude usage" loading="lazy"><figcaption>I used so much Claude they had to buy me more Claude.</figcaption></figure>
-        <figure class="receipt"><img src="assets/img/kevin-machine.jpg" alt="Kevin: absolute machineee!!" loading="lazy"><figcaption>Framing this.</figcaption></figure>
-        <figure class="receipt"><img src="assets/img/kevin-startup-mindset.jpg" alt="Kevin: it slows you down needing to log out -&gt; thats not startup mindset ;)" loading="lazy"><figcaption>The single most Kevin sentence ever typed.</figcaption></figure>
-        <figure class="receipt"><img src="assets/img/kevin-videos-fire.jpg" alt="Kevin: the videos are fireee 🔥 damn" loading="lazy"><figcaption>Peaked here, honestly.</figcaption></figure>
-        <figure class="receipt receipt-sig"><img src="assets/img/signature.jpg" alt="Email signature: Debora Ruban Arumairaj, GTM Intern, Spott" loading="lazy"><figcaption>Real job. Real signature. Still can't believe it.</figcaption></figure>
-      </div>
-    </div>
-  </section>
+      <h2 class="sec-title">And what did I <span class="hl hl-pink">actually learn</span>?</h2>
+      <p class="sec-lede">Seven weeks is not long. It was enough.</p>
 
-  <!-- ── PERSONAL CODE ── -->
-  <section class="sec sec-vault" id="vault">
-    <div class="wrap wrap-narrow">
-      <h2 class="sec-title sec-title-c">One more thing.</h2>
-      <p class="vault-lede">I wrote something for you. Just you — not a group message with your name swapped in. Enter your code to read it.</p>
+      <ol class="learns">
 
-      <form id="code-form" class="code-form" autocomplete="off">
-        <input id="code-input" class="code-input" type="text" inputmode="text" placeholder="ABC1" maxlength="12" aria-label="Your personal code" autocapitalize="characters" autocorrect="off" spellcheck="false">
-        <button class="code-btn" type="submit" id="code-btn">Open it</button>
-      </form>
-      <p class="code-status" id="code-status" role="status"></p>
+        <li class="learn learn-olive">
+          <span class="learn-n">01</span>
+          <div>
+            <h3>AI is leverage, not a shortcut</h3>
+            <p>Week three, Kevin told me <q>once you get the hang of MCP and API keys, your ai capabilities will 10x</q>. He was right. The trick was never asking it to do the thinking — it was knowing exactly what I wanted before I asked, and then having it done in an afternoon instead of a fortnight.</p>
+          </div>
+        </li>
 
-      <article class="letter" id="letter" hidden>
-        <div class="letter-head">
-          <span class="letter-for">for</span>
-          <h3 class="letter-name" id="letter-name"></h3>
-        </div>
-        <div class="letter-body" id="letter-body"></div>
-        <div class="letter-foot">
-          <span class="letter-sign">— Debora</span>
-        </div>
-      </article>
+        <li class="learn learn-pink">
+          <span class="learn-n">02</span>
+          <div>
+            <h3>Taste is the actual job</h3>
+            <p>The first batch of X posts got the note <q>feel really ai generated atm</q>, and that note was correct. Anyone can generate a draft now. Knowing which draft is bad, and being willing to write it again until it isn't, is the part that's still yours.</p>
+          </div>
+        </li>
+
+        <li class="learn learn-blue">
+          <span class="learn-n">03</span>
+          <div>
+            <h3>Writing the manual is how you learn the product</h3>
+            <p>Nobody sat me down and taught me Spott. I learned it by moving the docs out of Notion one page at a time and having to explain every screen to a stranger. You find out precisely how much you understand the moment you have to write it down.</p>
+          </div>
+        </li>
+
+        <li class="learn learn-yellow">
+          <span class="learn-n">04</span>
+          <div>
+            <h3>Startup mindset is just less friction</h3>
+            <p><q>it slows you down needing to log out → thats not startup mindset ;)</q> is the most Kevin sentence ever typed, and it turned out to be about more than logging out. Take the small obstacle away, now, rather than working around it politely for six weeks.</p>
+          </div>
+        </li>
+
+        <li class="learn learn-olive">
+          <span class="learn-n">05</span>
+          <div>
+            <h3>You can just start</h3>
+            <p>I came in not knowing what an ATS was, or a repo, or roughly forty percent of Kevin's Slack messages. Nobody was going to hand me permission to build, film, ship or deploy. You pick it up by doing it badly first, in public, on a deadline.</p>
+          </div>
+        </li>
+
+      </ol>
     </div>
   </section>
 
@@ -291,7 +308,6 @@
     <div class="wrap wrap-narrow">
       <h2 class="outro-title">Thank you <span class="outro-sub">for everything.</span></h2>
       <p class="outro-p">Seven weeks ago I did not know what an ATS was, what a repository was, or what Kevin meant by roughly forty percent of his Slack messages. I am leaving able to build, write, film, ship and deploy — and with a genuinely unreasonable fondness for all of you.</p>
-      <p class="outro-p outro-p-small">If you got here and there was no code with your name on it: that's on me, text me and I'll write you one. I mean that.</p>
       <div class="outro-links">
         <a class="olink olink-yellow" href="https://www.linkedin.com/in/debora-ruban-arumairaj/" target="_blank" rel="noopener">LinkedIn</a>
         <a class="olink olink-olive" href="mailto:deborararumairaj@gmail.com">Email</a>

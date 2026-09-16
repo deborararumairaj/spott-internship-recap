@@ -527,7 +527,7 @@ img,video{max-width:100%;display:block}
 .sec-miss{background:var(--cream)}
 .miss{
   list-style:none;margin:clamp(30px,4.5vw,48px) 0 0;padding:0;
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:clamp(16px,2.4vw,28px);
 }
 .miss-item{--c:var(--olive)}
@@ -543,7 +543,7 @@ img,video{max-width:100%;display:block}
 .miss-blue{--c:var(--blue)}
 .miss-yellow{--c:var(--yellow)}
 .miss-shot{
-  margin:0;aspect-ratio:4/5;border-radius:18px;overflow:hidden;
+  margin:0;aspect-ratio:3/2;border-radius:18px;overflow:hidden;
   background:var(--c);box-shadow:0 8px 24px rgba(27,66,105,.14);
   transition:transform .22s var(--ease),box-shadow .22s var(--ease),filter .22s;
 }
@@ -569,9 +569,14 @@ img,video{max-width:100%;display:block}
 .miss-olive .miss-tick,.miss-blue .miss-tick{color:#fff}
 .is-picked .miss-tick{opacity:1;transform:none}
 .miss-shot img{width:100%;height:100%;object-fit:cover;display:block}
-/* a 4:5 crop of the team photo centres on the back row and loses her —
-   she's seated front left, so hold the frame over there */
-.miss-pick[data-key="team"] .miss-shot img{object-position:18% center}
+/* the team crop would centre on the back row and lose her — she's
+   seated front left, so hold the frame over there */
+.miss-pick[data-key="team"] .miss-shot img{object-position:22% center}
+/* the vlog thumbnail is already landscape; show all of it */
+.miss-pick[data-key="vlogs"] .miss-shot img{object-fit:contain;background:#F3D9EE}
+/* these two are portrait, so bias the crop to the faces */
+.miss-pick[data-key="merch"] .miss-shot img,
+.miss-pick[data-key="food"] .miss-shot img{object-position:center 32%}
 /* until the photo lands */
 .miss-shot.empty{
   background:transparent;border:2px dashed rgba(27,66,105,.22);box-shadow:none;
@@ -611,7 +616,7 @@ img,video{max-width:100%;display:block}
 .miss-verdict.is-right{color:var(--olive-dk)}
 .miss.is-solved .miss-pick{cursor:default}
 
-@media (max-width:900px){ .miss{grid-template-columns:1fr 1fr} }
+@media (max-width:760px){ .miss{grid-template-columns:1fr 1fr} }
 @media (max-width:460px){ .miss{grid-template-columns:1fr;gap:18px} }
 
 /* ─────────── OUTRO ─────────── */

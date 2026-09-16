@@ -22,10 +22,10 @@ const CONFIG = {
 
   /* TEST WINDOW — the front door is simply open until this moment, so
      the whole guest flow can be walked through end to end. It shuts at
-     18:30 by itself, leaving fifteen quiet minutes before the real
+     18:40 by itself, leaving five quiet minutes before the real
      unlock at 18:45. Her own code keeps working either way.
-     Wed 16 Sep 2026, 18:30 Brussels (CEST = UTC+2) → 16:30 UTC.       */
-  testUntil: '2026-09-16T16:30:00Z',
+     Wed 16 Sep 2026, 18:40 Brussels (CEST = UTC+2) → 16:40 UTC.       */
+  testUntil: '2026-09-16T16:40:00Z',
 
   /* The codes themselves are NOT in this file. These are SHA-256 of the
      normalised codes, so reading the source doesn't hand them over.
@@ -72,6 +72,21 @@ const gate      = $('#gate');
 const panelPass = $('#gate-passcode');
 const unlockTs  = new Date(CONFIG.unlockAt).getTime();
 const testUntilTs = CONFIG.testUntil ? new Date(CONFIG.testUntil).getTime() : 0;
+
+let gateTimer;
+function tickGate() {
+  const left = unlockTs - Date.now();
+  if (left <= 0) {
+    clearInterval(gateTimer);
+    $('#gate-title').textContent = 'Unlocked';
+    $('#clock').hidden = true;
+    return;
+  }
+  const s = Math.floor(left / 1000);
+  $('#cd-h').textContent = pad(Math.floor(s / 3600));
+  $('#cd-m').textContent = pad(Math.floor(s / 60) % 60);
+  $('#cd-s').textContent = pad(s % 60);
+}
 
 function renderWhen() {
   const d = new Date(unlockTs);
@@ -148,14 +163,32 @@ function wireAudio(autoplay) {
   if (autoplay) {
     audioLive = true;
     audio.muted = false;
+
+    /* Last resort. The submit should already have started the track —
+       that click is the gesture browsers want — but policies differ and
+       a phone on silent will refuse outright. So if it still isn't
+       playing, the very next touch anywhere on the page starts it, and
+       the sound button keeps nudging until it does. */
+    const rescue = () => {
+      if (!audio.paused) return unhook();
+      audio.play().then(() => { setState(false, 'sound on'); unhook(); }).catch(() => {});
+    };
+    const unhook = () => {
+      toggle.classList.remove('is-nudging');
+      ['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
+        document.removeEventListener(ev, rescue, true));
+    };
+
     if (!audio.paused) {            // the submit already got it going
       setState(false, 'sound on');
     } else {
       audio.play()
         .then(() => setState(false, 'sound on'))
-        .catch(() => {              // no gesture to spend (e.g. a ?code= link)
-          setState(true, 'play audio');
+        .catch(() => {
+          setState(true, 'tap for sound');
           toggle.classList.add('is-nudging');
+          ['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
+            document.addEventListener(ev, rescue, true));
         });
     }
   } else {
@@ -181,6 +214,7 @@ function revealSite(autoplayAudio) {
 }
 
 function enterSite() {
+  clearInterval(gateTimer);
   gate.classList.add('is-gone');
   setTimeout(() => gate.remove(), 900);
   revealSite(true);
@@ -614,6 +648,8 @@ window.addEventListener('scroll', onScroll, { passive: true });
 
 if (CONFIG.gateEnabled) {
   renderWhen();
+  tickGate();
+  gateTimer = setInterval(tickGate, 1000);
 
   /* ?code=<code> walks straight in, for checking it on a phone. A code
      in a URL lands in history and referrers, so that link is hers. */

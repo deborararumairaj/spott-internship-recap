@@ -24,7 +24,16 @@
     <div class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
     <div id="gate-passcode" class="gate-panel">
-      <h1 class="gate-title">Unlocks</h1>
+      <h1 class="gate-title" id="gate-title">Unlocks in</h1>
+
+      <div class="clock" id="clock" role="timer" aria-live="off">
+        <div class="clock-unit"><span class="clock-num" id="cd-h">--</span><span class="clock-lbl">hours</span></div>
+        <div class="clock-sep">:</div>
+        <div class="clock-unit"><span class="clock-num" id="cd-m">--</span><span class="clock-lbl">minutes</span></div>
+        <div class="clock-sep">:</div>
+        <div class="clock-unit"><span class="clock-num" id="cd-s">--</span><span class="clock-lbl">seconds</span></div>
+      </div>
+
       <p class="gate-when" id="gate-when"></p>
 
       <form id="pass-form" class="pass-form" autocomplete="off">
@@ -32,6 +41,8 @@
         <button class="pass-btn" type="submit">Enter</button>
       </form>
       <p class="pass-error" id="pass-error" role="alert"></p>
+
+      <p class="gate-fineprint">“Claude, make it unhackable. Spott has some really smart people.”</p>
     </div>
 
   </div>

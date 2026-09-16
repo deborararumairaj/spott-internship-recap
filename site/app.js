@@ -7,16 +7,16 @@ const CONFIG = {
      │  false = no countdown, no passcode, site just opens. │
      │  Flip to true to put the gate back for launch day.   │
      └──────────────────────────────────────────────────────┘ */
-  gateEnabled: false,
+  gateEnabled: true,
 
   /* The one moment, same for everyone.
-     Fri 18 Sep 2026, 17:00 Brussels (CEST = UTC+2) → 15:00 UTC.
+     Wed 16 Sep 2026, 18:30 Brussels (CEST = UTC+2) → 16:30 UTC.
      Change this one line to move the unlock.                     */
-  unlockAt: '2026-09-18T15:00:00Z',
+  unlockAt: '2026-09-16T16:30:00Z',
 
   /* Front-door passcode. Matching is forgiving: case, spaces
-     and punctuation are all ignored.                             */
-  passcode: 'debora the intern',
+     and punctuation are all ignored — so the @ is optional.      */
+  passcode: 'debora@spott',
 };
 
 /* ─────────── tiny helpers ─────────── */

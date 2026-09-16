@@ -20,12 +20,18 @@ const CONFIG = {
      Change this one line to move the unlock.                     */
   unlockAt: '2026-09-16T16:30:00Z',
 
-  /* The passcode itself is NOT in this file. What's here is a SHA-256
-     of the normalised code, so reading the source doesn't hand it over.
+  /* The codes themselves are NOT in this file. These are SHA-256 of the
+     normalised codes, so reading the source doesn't hand them over.
      Matching stays forgiving: case, spaces and punctuation are all
-     ignored before hashing — so the @ is optional.
-     To change it: sha256(code.toLowerCase().replace(/[^a-z0-9]/g,'')) */
-  passcodeHash: '6cc4edfa71ce6c0ab0b4869fcfe31269e87359529297a68026755f1b655e5d97',
+     ignored before hashing — so the @ and the dash are optional.
+     To add one: sha256(code.toLowerCase().replace(/[^a-z0-9]/g,''))
+
+       [0] the front door — the code everyone is given
+       [1] Debora's own, for getting in before the clock runs out      */
+  codeHashes: [
+    '6cc4edfa71ce6c0ab0b4869fcfe31269e87359529297a68026755f1b655e5d97',
+    '50e6ce81c4a0a7dfd8b032f795f5916c8d32ec6e96f9961cff7136578422ce5c',
+  ],
 };
 
 /* ─────────── tiny helpers ─────────── */
@@ -36,6 +42,11 @@ const softMatch = s => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 const sha256Hex = async (s) => {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+};
+const isGoodCode = async (raw) => {
+  const norm = softMatch(raw);
+  if (!norm) return false;
+  return CONFIG.codeHashes.includes(await sha256Hex(norm));
 };
 
 /* ══════════════════════════════════════════════════
@@ -127,7 +138,7 @@ let wrongIdx = 0;
 $('#pass-form').addEventListener('submit', async e => {
   e.preventDefault();
   const input = $('#pass-input');
-  if (await sha256Hex(softMatch(input.value)) === CONFIG.passcodeHash) return enterSite();
+  if (await isGoodCode(input.value)) return enterSite();
   $('#pass-error').textContent = WRONG[wrongIdx++ % WRONG.length];
   panelPass.classList.remove('shake');
   void panelPass.offsetWidth;
@@ -566,11 +577,22 @@ if (CONFIG.gateEnabled) {
   tickGate();
   gateTimer = setInterval(tickGate, 1000);
 
-  /* Preview hatch before launch: ?preview=1 skips the countdown but NOT the
-     passcode — only useful to someone who already knows the code. */
-  if (new URLSearchParams(location.search).has('preview')) {
+  /* Two hatches before launch, both useless without a code.
+     ?preview=1        → skips the countdown, still asks for the code.
+     ?code=<the code>  → walks straight in, for testing on a phone.
+     A code in a URL ends up in history and referrers, so the link is
+     for her, not for sharing. */
+  const qs = new URLSearchParams(location.search);
+  if (qs.has('preview')) {
     clearInterval(gateTimer);
     showPasscode();
+  }
+  if (qs.has('code')) {
+    isGoodCode(qs.get('code')).then(ok => {
+      if (!ok) return;
+      clearInterval(gateTimer);
+      enterSite();
+    });
   }
 } else {
   gate.remove();

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Debora the intern</title>
+<meta name="description" content="Seven weeks at Spott, recapped. Enter at your own risk.">
+<meta property="og:title" content="Debora the intern">
+<meta property="og:description" content="Seven weeks at Spott, recapped. There is a countdown. There is a passcode. There is a message in here with your name on it.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#12263C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='26' cy='30' r='20' fill='%2312263C'/%3E%3Ccircle cx='52' cy='44' r='9' fill='%23F26A21'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="is-locked">
+
+<!-- ═══════════════ GATE ═══════════════ -->
+<div id="gate" class="gate">
+  <div class="gate-inner">
+
+    <div class="mark" aria-hidden="true"><span class="mark-o"></span><span class="mark-dot"></span></div>
+
+    <!-- COUNTDOWN STATE -->
+    <div id="gate-countdown" class="gate-panel">
+      <p class="gate-kicker">Debora's internship recap</p>
+      <h1 class="gate-title">Unlocks in</h1>
+
+      <div class="clock" id="clock" role="timer" aria-live="off">
+        <div class="clock-unit"><span class="clock-num" id="cd-d">--</span><span class="clock-lbl">days</span></div>
+        <div class="clock-sep">:</div>
+        <div class="clock-unit"><span class="clock-num" id="cd-h">--</span><span class="clock-lbl">hours</span></div>
+        <div class="clock-sep">:</div>
+        <div class="clock-unit"><span class="clock-num" id="cd-m">--</span><span class="clock-lbl">minutes</span></div>
+        <div class="clock-sep">:</div>
+        <div class="clock-unit"><span class="clock-num" id="cd-s">--</span><span class="clock-lbl">seconds</span></div>
+      </div>
+
+      <p class="gate-when" id="gate-when"></p>
+
+      <div class="spinner-line">
+        <span class="spinner-star">✳</span>
+        <span id="spinner-word">Tinkering…</span>
+        <span class="spinner-meta" id="spinner-meta">(still thinking)</span>
+      </div>
+
+      <p class="gate-plead" id="gate-plead">I know you're really curious about my internship. You have to wait.</p>
+
+      <p class="gate-fineprint">It counts down for a reason. No, there is no skip button — I checked, I asked three different AIs, and one of them lied to me about it.</p>
+    </div>
+
+    <!-- PASSCODE STATE -->
+    <div id="gate-passcode" class="gate-panel" hidden>
+      <p class="gate-kicker">It's time</p>
+      <h1 class="gate-title">What's the passcode?</h1>
+      <form id="pass-form" class="pass-form" autocomplete="off">
+        <input id="pass-input" class="pass-input" type="text" placeholder="three words" aria-label="Passcode" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <button class="pass-btn" type="submit">Enter</button>
+      </form>
+      <p class="pass-error" id="pass-error" role="alert"></p>
+      <p class="gate-fineprint">Turn your sound on. Seriously, turn your sound on.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ AUDIO ═══════════════ -->
+<audio id="intro-audio" preload="none" playsinline>
+  <source src="assets/audio/intro.m4a" type="audio/mp4">
+  <source src="assets/audio/intro.mp3" type="audio/mpeg">
+</audio>
+<button id="sound-toggle" class="sound-toggle" hidden aria-label="Toggle sound">
+  <span class="st-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <span class="st-label">sound on</span>
+</button>
+
+<!-- ═══════════════ SITE ═══════════════ -->
+<main id="site" class="site" hidden>
+
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">A recap, unwrapped ;)</p>
+          <h1 class="hero-title">
+            Hi, I'm <span class="hl hl-orange">Debora</span>, a <span class="nowrap">Spott intern</span> for the past few weeks.
+          </h1>
+          <p class="hero-sub">Today I wanted to tell you all about my experience at Spott.</p>
+          <div class="hero-tags">
+            <span class="tag tag-blue">GTM Intern</span>
+            <span class="tag tag-olive">7 weeks</span>
+            <span class="tag tag-pink">Leuven</span>
+            <span class="tag tag-yellow">1 pitch deck</span>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <img src="assets/img/debora.png" alt="Debora" width="800" height="760">
+        </div>
+      </div>
+      <p class="scroll-hint">scroll <span aria-hidden="true">↓</span></p>
+    </div>
+  </header>
+
+  <!-- ── HOW I GOT HERE ── -->
+  <section class="sec sec-origin">
+    <div class="wrap">
+      <h2 class="big-q">But first — how did I even <span class="hl hl-pink">get here?</span></h2>
+
+      <div class="origin-grid">
+        <div class="origin-steps">
+          <div class="step">
+            <span class="step-n">1</span>
+            <p><strong>Kevin.</strong> A friend of a friend of a Kevin, and suddenly there's a name in my head and a company I'd never heard of. He referred me. He would later become my supervisor, which means he is personally responsible for all of this.</p>
+          </div>
+          <div class="step">
+            <span class="step-n">2</span>
+            <p><strong>I slid into Manu's DMs.</strong> Bold, in hindsight. He replied. He also mentioned — politely, reasonably — that they <em>already had interns</em>.</p>
+          </div>
+          <div class="step">
+            <span class="step-n">3</span>
+            <p><strong>So I made a pitch deck.</strong> About myself. Eleven slides. Sections. A TL;DR. A slide literally titled <em>"Why me?"</em> Nobody asked for this.</p>
+          </div>
+          <div class="step">
+            <span class="step-n">4</span>
+            <p><strong>We had a call.</strong> And then I was an intern. That's it. That's the whole trick.</p>
+          </div>
+        </div>
+
+        <aside class="deck-card">
+          <div class="deck-card-top">
+            <span class="deck-pill">slide 9 of the pitch deck</span>
+          </div>
+          <blockquote class="deck-quote">“Wondering why Spott? <span>honestly what's not to love :)</span>”</blockquote>
+          <p class="deck-note">There was also a slide asking whether interns get Spott merch. I stand by every word of it.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── EDITED MYSELF IN ── -->
+  <section class="sec sec-edit">
+    <div class="wrap">
+      <h2 class="sec-title">This is exactly how I got here.</h2>
+      <figure class="edit-fig">
+        <div class="edit-frame">
+          <img src="assets/img/edited-in.jpg" alt="The Spott team photo, with Debora seated on the far left — pasted in" width="1600" height="1206">
+          <span class="edit-badge">← that's me</span>
+        </div>
+        <figcaption>
+          <p class="edit-cap">In the team photo on slide 9 of the deck I sent them, I am sitting front row, far left, looking very much like I belong there. I was not at that photoshoot. I had never met any of these people. I was, at the time of this photograph, not employed by this company.</p>
+          <p class="edit-cap edit-cap-punch">The lesson is simple and I will die on it: <strong>always edit yourself in.</strong> Worst case, someone notices the lighting is wrong. Best case, nobody checks, and by the time they do, it's true.</p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ── WEEKS ── -->
+  <section class="sec sec-weeks" id="weeks">
+    <div class="wrap wrap-wide">
+      <h2 class="sec-title">So what did I <span class="hl hl-blue">actually do</span> all day?</h2>
+      <p class="sec-lede">Mostly, I asked questions. Here is a representative sample. The counter is real.</p>
+    </div>
+
+    <!-- sticky search pill -->
+    <div class="pill-rail" id="pill-rail" aria-hidden="true">
+      <div class="wrap wrap-wide">
+        <div class="pill-row">
+          <div class="search-pill">
+            <svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <span class="pill-text" id="pill-text"></span><span class="pill-caret"></span>
+          </div>
+          <div class="qcount"><span class="qcount-n" id="qcount">0</span> <span class="qcount-l">questions asked</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="weeks-root"></div>
+  </section>
+
+  <!-- ── THE WORK ── -->
+  <section class="sec sec-work" id="work">
+    <div class="wrap">
+      <h2 class="sec-title">And in between the questions, <span class="hl hl-olive">this got made.</span></h2>
+
+      <div class="stats">
+        <div class="stat"><span class="stat-n" data-count="7">7</span><span class="stat-l">weeks</span></div>
+        <div class="stat"><span class="stat-n" data-count="1">1</span><span class="stat-l">docs site rebuilt</span></div>
+        <div class="stat"><span class="stat-n" data-count="40">40</span><span class="stat-l">min onboarding video</span></div>
+        <div class="stat"><span class="stat-n" data-count="1">1</span><span class="stat-l">X account, from zero</span></div>
+        <div class="stat"><span class="stat-n" data-count="0">0</span><span class="stat-l">idea what an ATS was on day 1</span></div>
+      </div>
+
+      <div class="work-grid">
+
+        <article class="card card-blue card-wide">
+          <span class="card-tag">the big one</span>
+          <h3>Notion → Mintlify</h3>
+          <p>The onboarding docs lived in Notion. They now live in Mintlify, because I moved them there, one page at a time, and then rewrote basically all of it.</p>
+          <div class="ba">
+            <div class="ba-item">
+              <p class="ba-label">Before — Notion</p>
+              <video src="assets/video/notion.mp4" preload="none" controls playsinline muted></video>
+            </div>
+            <div class="ba-item">
+              <p class="ba-label">After — Mintlify</p>
+              <video src="assets/video/mintlify.mp4" preload="none" controls playsinline muted></video>
+            </div>
+          </div>
+        </article>
+
+        <article class="card card-pink">
+          <span class="card-tag">writing</span>
+          <h3>I rewrote all of it</h3>
+          <p>Not "tidied". Rewrote. Every page, in a voice a new hire could actually read on their first morning without wanting to lie down.</p>
+        </article>
+
+        <article class="card card-olive">
+          <span class="card-tag">structure</span>
+          <h3>And rethought the shape of it</h3>
+          <p>Restructured the whole thing so that a person on day one can find any answer in about two clicks, instead of scrolling a Notion page until they give up and ask in Slack.</p>
+        </article>
+
+        <article class="card card-yellow">
+          <span class="card-tag">film</span>
+          <h3>Screen-recorded every animation</h3>
+          <p>Every flow on the product, captured, trimmed, and dropped into the docs so the words have something to point at. There are a <em>lot</em> of these.</p>
+          <img class="card-shot" src="assets/img/file-list.jpg" alt="A long list of recorded clips: Manage Candidates, search and filter, AI summary, Matching, Enrich…" loading="lazy">
+        </article>
+
+        <article class="card card-blue">
+          <span class="card-tag">film</span>
+          <h3>40 minutes with Sebastian</h3>
+          <p>Recorded a full onboarding walkthrough with Sebastian, then cut it into something a human being would voluntarily watch.</p>
+        </article>
+
+        <article class="card card-pink">
+          <span class="card-tag">film</span>
+          <h3>A welcome video with CS</h3>
+          <p>Filmed, framed, and edited. <strong>WE GOT THE SHOT</strong> is a thing I typed in Slack at 10:51 in the morning and I meant it sincerely.</p>
+        </article>
+
+        <article class="card card-olive">
+          <span class="card-tag">lifecycle</span>
+          <h3>The onboarding email sequence</h3>
+          <p>Picked apart the CS onboarding mailing sequence, checked every link still worked, and reworked the flow with Naomi.</p>
+          <img class="card-shot" src="assets/img/kevin-cs-email.jpg" alt="Kevin in Slack assigning the onboarding mailing sequence" loading="lazy">
+        </article>
+
+        <article class="card card-yellow">
+          <span class="card-tag">cover</span>
+          <h3>Backfill for Nathan</h3>
+          <p>Nathan was out. Things still needed doing. I did the things.</p>
+        </article>
+
+        <article class="card card-blue">
+          <span class="card-tag">zero to one</span>
+          <h3>Started the X account</h3>
+          <p>From nothing. Built the voice, queued the posts, got told the first batch "feel really ai generated atm", and rewrote them until they didn't.</p>
+        </article>
+
+        <article class="card card-pink">
+          <span class="card-tag">and</span>
+          <h3>Plus the long tail</h3>
+          <p>An AI report. Reworked posts. A wrap-up presentation. Clips, framing, thumbnails, and a running list of small things that were broken and are now not broken.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RECEIPTS ── -->
+  <section class="sec sec-receipts">
+    <div class="wrap">
+      <h2 class="sec-title">Receipts</h2>
+      <div class="receipts">
+        <figure class="receipt"><img src="assets/img/kevin-mcp.jpg" alt="Kevin: but once you get the hang of MCP and API keys, your ai capabilities will 10x" loading="lazy"><figcaption>Week 3, and he was right.</figcaption></figure>
+        <figure class="receipt"><img src="assets/img/seat-upgraded.jpg" alt="Your seat was upgraded — you now have more Claude usage" loading="lazy"><figcaption>I used so much Claude they had to buy me more Claude.</figcaption></figure>
+        <figure class="receipt"><img src="assets/img/kevin-machine.jpg" alt="Kevin: absolute machineee!!" loading="lazy"><figcaption>Framing this.</figcaption></figure>
+        <figure class="receipt"><img src="assets/img/kevin-startup-mindset.jpg" alt="Kevin: it slows you down needing to log out -&gt; thats not startup mindset ;)" loading="lazy"><figcaption>The single most Kevin sentence ever typed.</figcaption></figure>
+        <figure class="receipt"><img src="assets/img/kevin-videos-fire.jpg" alt="Kevin: the videos are fireee 🔥 damn" loading="lazy"><figcaption>Peaked here, honestly.</figcaption></figure>
+        <figure class="receipt receipt-sig"><img src="assets/img/signature.jpg" alt="Email signature: Debora Ruban Arumairaj, GTM Intern, Spott" loading="lazy"><figcaption>Real job. Real signature. Still can't believe it.</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PERSONAL CODE ── -->
+  <section class="sec sec-vault" id="vault">
+    <div class="wrap wrap-narrow">
+      <h2 class="sec-title sec-title-c">One more thing.</h2>
+      <p class="vault-lede">I wrote something for you. Just you — not a group message with your name swapped in. Enter your code to read it.</p>
+
+      <form id="code-form" class="code-form" autocomplete="off">
+        <input id="code-input" class="code-input" type="text" inputmode="text" placeholder="ABC1" maxlength="12" aria-label="Your personal code" autocapitalize="characters" autocorrect="off" spellcheck="false">
+        <button class="code-btn" type="submit" id="code-btn">Open it</button>
+      </form>
+      <p class="code-status" id="code-status" role="status"></p>
+
+      <article class="letter" id="letter" hidden>
+        <div class="letter-head">
+          <span class="letter-for">for</span>
+          <h3 class="letter-name" id="letter-name"></h3>
+        </div>
+        <div class="letter-body" id="letter-body"></div>
+        <div class="letter-foot">
+          <span class="letter-sign">— Debora</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── OUTRO ── -->
+  <footer class="sec sec-outro">
+    <div class="wrap wrap-narrow">
+      <h2 class="outro-title">Thank you <span class="outro-sub">for everything.</span></h2>
+      <p class="outro-p">Seven weeks ago I did not know what an ATS was, what a repository was, or what Kevin meant by roughly forty percent of his Slack messages. I am leaving able to build, write, film, ship and deploy — and with a genuinely unreasonable fondness for all of you.</p>
+      <p class="outro-p outro-p-small">If you got here and there was no code with your name on it: that's on me, text me and I'll write you one. I mean that.</p>
+      <div class="outro-links">
+        <a class="olink olink-yellow" href="https://www.linkedin.com/in/debora-ruban-arumairaj/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="olink olink-olive" href="mailto:deborararumairaj@gmail.com">Email</a>
+      </div>
+      <p class="outro-ps">PS: Do interns get Spott merch? I'd really like some please :))</p>
+    </div>
+  </footer>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

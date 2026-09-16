@@ -1,0 +1,21 @@
+# ── the private bits — real names, real messages. NEVER commit these. ──
+site/people.json
+site/people.local.json
+site/people.*.json
+!site/people.example.json
+
+# ── heavy source media (web-ready copies live in site/assets) ──
+Old content/
+MY Projects/
+Screenshots/
+Slack/
+Videos /
+Audio /
+Images/
+Brand/
+Fonts/
+
+.DS_Store
+**/.DS_Store
+node_modules/
+.vercel

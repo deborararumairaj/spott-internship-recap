@@ -183,7 +183,7 @@ function renderQ([src, text, mod]) {
 
 const WEEK1 = {
   title: 'Absolutely no idea what is happening',
-  note: 'I was thrown into the deep end.',
+  note: 'I was thrown in the deep end — but of course I also had a floaty (my Claude subscription), so it was all good.',
   qs: [
     ['google',  'what is a repository'],
     ['google',  'what is an ATS'],
@@ -219,8 +219,8 @@ const WEEK2 = {
       aside: {
         b: 'I even had to take Claude to the doctor a few times',
         p: "Poor thing couldn't keep up with startup life.",
-        shot: 'assets/img/claude-doctor.jpg',
-        shotAlt: 'Claude, out of office and feeling unwell',
+        shot: 'assets/img/claude-doctor.png',
+        shotAlt: 'Terminal: Auto-update failed · Run claude doctor',
       },
     },
   ],

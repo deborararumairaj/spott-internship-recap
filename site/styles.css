@@ -381,8 +381,9 @@ img,video{max-width:100%;display:block}
 .beat-aside{display:flex;flex-direction:column;gap:14px;align-items:flex-start;
   width:min(100%,400px);margin:16px 0 0 clamp(0px,3vw,38px)}
 .beat-aside .bub{width:100%}
-.aside-shot{margin:0;border-radius:14px;overflow:hidden;background:#fff;
-  box-shadow:0 8px 24px rgba(27,66,105,.16);align-self:stretch}
+/* a single terminal line — let it sit flush rather than float it on a card */
+.aside-shot{margin:0;border-radius:10px;overflow:hidden;
+  box-shadow:0 6px 18px rgba(27,66,105,.14);align-self:stretch}
 .aside-shot img{width:100%;display:block}
 @media (max-width:900px){
   .beat-aside{margin-left:0;width:100%}
@@ -636,7 +637,6 @@ img,video{max-width:100%;display:block}
   .week{grid-template-columns:1fr;gap:18px}
   .week-left{position:sticky;top:64px;background:var(--cream);padding:14px 0 16px;z-index:20}
   .week-num{font-size:clamp(40px,13vw,62px);margin-bottom:8px}
-  .week-note{display:none}
   .ba{grid-template-columns:1fr}
 }
 @media (max-width:760px){
@@ -706,7 +706,6 @@ img,video{max-width:100%;display:block}
   .wk-field > .q:nth-child(even){margin-left:auto;width:94%}
   .wk-field > .q:nth-child(odd){width:94%}
   .wk-head{padding-top:14px}
-  .week-note{display:none}
   .beat-bub{width:100%;margin-left:0!important;margin-right:0!important}
   .sig{left:auto;right:4%;bottom:-18px;transform:rotate(-1.2deg)}
   .beat-b{text-align:left;margin-left:0}

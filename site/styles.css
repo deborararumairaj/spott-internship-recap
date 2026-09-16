@@ -471,40 +471,70 @@ img,video{max-width:100%;display:block}
 
 .ba{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;max-width:620px}
 .ba-label{font-size:12px!important;font-weight:800!important;letter-spacing:.09em;text-transform:uppercase;margin:0 0 8px!important;opacity:.78}
-.ba video{width:100%;display:block;border-radius:12px;background:var(--navy-deep);box-shadow:0 6px 20px rgba(0,0,0,.18);aspect-ratio:16/9;object-fit:cover}
+.ba video{width:100%;display:block;border-radius:12px;background:var(--navy-deep);box-shadow:0 6px 20px rgba(0,0,0,.18);aspect-ratio:1108/720}
 
 /* ─────────── WHAT I LEARNED ─────────── */
-.sec-learn{background:var(--cream-2)}
-.learns{list-style:none;margin:clamp(30px,4.5vw,48px) 0 0;padding:0;
-  display:flex;flex-direction:column;gap:clamp(16px,2.4vw,22px)}
+/* Straight off her deck slide: "I learnt… / A lot.", then four cards
+   walking down and to the right, each with its title on a white pill. */
+.sec-learn{background:var(--cream-2);overflow:hidden}
+
+.learn-head{display:grid;gap:4px}
+.learn-title{
+  font-size:clamp(38px,8.4vw,92px);font-weight:800;letter-spacing:-.042em;
+  line-height:1;margin:0;color:var(--navy-deep);
+}
+.learn-alot{
+  font-size:clamp(50px,10vw,120px);font-weight:800;letter-spacing:-.045em;
+  line-height:.92;margin:0;color:var(--navy-deep);text-align:right;
+}
+
+.learns{
+  --step:clamp(28px,4.6vw,68px);
+  list-style:none;padding:0;
+  margin:clamp(-64px,-5.4vw,-22px) 0 0;      /* tucks the cards up beside "A lot." */
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(12px,1.8vw,22px);align-items:start;
+}
 .learn{
   --c:var(--olive);
-  display:grid;grid-template-columns:auto 1fr;gap:clamp(16px,2.6vw,26px);align-items:start;
-  background:#fff;border-radius:18px;padding:clamp(20px,2.8vw,28px);
-  border-left:6px solid var(--c);
-  box-shadow:0 6px 22px rgba(27,66,105,.09);
+  margin-top:calc(var(--i) * var(--step));
+  background:var(--c);border-radius:20px;
+  padding:clamp(13px,1.5vw,17px) clamp(13px,1.5vw,17px) clamp(20px,2.4vw,28px);
+  box-shadow:0 8px 26px rgba(27,66,105,.13);
 }
-.learn-n{
-  font-family:var(--mono);font-size:13px;font-weight:500;
-  width:42px;height:42px;flex:none;display:grid;place-items:center;
-  border-radius:50%;background:var(--c);color:var(--navy-deep);
+.learn h3{
+  margin:0 0 clamp(14px,1.9vw,24px);
+  background:#fff;border-radius:14px;
+  padding:clamp(10px,1.2vw,14px) clamp(10px,1.4vw,16px);
+  font-size:clamp(14.5px,1.7vw,20px);font-weight:800;letter-spacing:-.022em;
+  line-height:1.15;color:var(--navy-deep);text-align:center;
+  box-shadow:0 3px 10px rgba(27,66,105,.08);
 }
-.learn-olive{--c:var(--olive)}
-.learn-olive .learn-n{color:#fff}
-.learn-pink{--c:var(--pink)}
-.learn-blue{--c:var(--blue)}
-.learn-yellow{--c:var(--yellow)}
-.learn h3{font-size:clamp(19px,2.6vw,25px);font-weight:800;letter-spacing:-.024em;
-  line-height:1.2;margin:.35em 0 .5em}
-.learn p{margin:0;font-size:clamp(15px,1.9vw,16.5px);line-height:1.62;
-  color:rgba(27,66,105,.84);max-width:46em}
-.learn q{font-style:italic;color:var(--navy-deep);font-weight:600}
-.learn q::before{content:'\201C'}
-.learn q::after{content:'\201D'}
+.learn p{margin:0;font-size:clamp(13.5px,1.45vw,16px);line-height:1.44;font-weight:500}
+.learn-olive{--c:var(--olive);color:#fff}
+.learn-pink{--c:var(--pink);color:var(--navy-deep)}
+.learn-blue{--c:var(--blue);color:#fff}
+.learn-yellow{--c:var(--yellow);color:var(--navy-deep)}
 
-@media (max-width:620px){
-  .learn{grid-template-columns:1fr;gap:6px}
-  .learn-n{width:36px;height:36px;font-size:12px}
+.learn-wonder{
+  display:flex;align-items:center;gap:clamp(10px,1.4vw,16px);
+  margin:clamp(44px,6vw,80px) 0 0;
+}
+.learn-star{flex:none;width:clamp(32px,3.8vw,46px);height:clamp(32px,3.8vw,46px)}
+.learn-star svg{width:100%;height:100%;display:block}
+.learn-wonder-txt{
+  background:#FFFBF4;border-radius:14px;
+  padding:clamp(13px,1.7vw,19px) clamp(17px,2.3vw,26px);
+  font-size:clamp(15px,1.9vw,19px);font-weight:500;color:var(--navy-deep);
+  box-shadow:0 4px 14px rgba(27,66,105,.08);
+}
+
+@media (max-width:900px){
+  .learns{grid-template-columns:1fr 1fr;--step:clamp(16px,2.8vw,32px);margin-top:18px}
+  .learn-alot{text-align:left}
+}
+@media (max-width:560px){
+  .learns{grid-template-columns:1fr;--step:0px;gap:14px}
 }
 
 /* ─────────── OUTRO ─────────── */
@@ -643,6 +673,7 @@ img,video{max-width:100%;display:block}
 .work-shot{margin:0;max-width:560px;border-radius:14px;overflow:hidden;
   box-shadow:0 10px 30px rgba(27,66,105,.16);background:#fff}
 .work-shot img{width:100%}
+.work-shot-vid video{width:100%;display:block;background:var(--navy-deep);aspect-ratio:1112/720}
 .work-shot figcaption{padding:11px 15px;font-size:13px;font-weight:600;color:rgba(27,66,105,.62)}
 
 .stills{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:760px}

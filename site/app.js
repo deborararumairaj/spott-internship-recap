@@ -359,19 +359,29 @@ function observeAll() {
   wireBlur();
 }
 
-/* ─────────── the before/after clips ───────────
-   They're big files, so nothing is fetched until the pair is
-   actually on screen. Then they load, loop and play themselves;
-   scroll away and they pause so two videos aren't running for
-   nothing. Sound stays off — the audio track is the page's job. */
+/* ─────────── the clips ───────────
+   Every clip on the page autoplays itself: nothing is fetched until it
+   scrolls into view, then it loads, loops and plays muted, and pauses
+   again on the way out. Muted is not a style choice — no browser will
+   autoplay a clip with sound. The controls are there to unmute.
+
+   The before/after pair needs one extra thing. The two recordings are
+   different lengths (27s of Notion against 37.5s of Mintlify), so left
+   alone they drift and you end up comparing the start of one against
+   the middle of the other. Each one's playbackRate is scaled so a full
+   pass takes the same time either way, and they get nudged back into
+   step as they run. Set SYNC_PAIR to false to let them run at their
+   own natural speed. */
+const SYNC_PAIR = true;
+
 function wireClips() {
-  const clips = $$('.ba-clip');
+  const clips = $$('video.clip');
   if (!clips.length) return;
 
   const play = (v) => {
     if (!v.src) { v.src = v.dataset.src; v.preload = 'auto'; v.load(); }
     const p = v.play();
-    if (p) p.catch(() => {});   // browser said no; the controls still work
+    if (p) p.catch(() => {});          // browser said no; the controls still work
   };
 
   const obs = new IntersectionObserver((entries) => {
@@ -379,9 +389,30 @@ function wireClips() {
       if (e.isIntersecting) play(e.target);
       else if (e.target.src) e.target.pause();
     });
-  }, { threshold: .35 });
+  }, { threshold: .3 });
 
-  clips.forEach(v => { v.muted = true; obs.observe(v); });
+  clips.forEach(v => { v.muted = true; v.playbackRate = 1; obs.observe(v); });
+
+  /* ── keep the before/after pair in lockstep ── */
+  const pair = $$('.ba video.clip');
+  if (!SYNC_PAIR || pair.length < 2) return;
+
+  let ready = 0;
+  pair.forEach(v => v.addEventListener('loadedmetadata', () => {
+    if (++ready < pair.length) return;
+
+    const cycle = Math.min(...pair.map(x => x.duration));
+    pair.forEach(x => { x.playbackRate = x.duration / cycle; x.currentTime = 0; });
+
+    /* started together; this stops them creeping apart over a long scroll */
+    setInterval(() => {
+      if (pair.some(x => x.paused || !x.duration)) return;
+      const ref = pair[0].currentTime / pair[0].duration;
+      pair.slice(1).forEach(x => {
+        if (Math.abs(x.currentTime / x.duration - ref) > .1) x.currentTime = ref * x.duration;
+      });
+    }, 4000);
+  }, { once: true }));
 }
 
 /* The welcome-video stills may not be in the folder yet — don't show a broken image. */

@@ -65,8 +65,9 @@
 </div>
 
 <!-- ═══════════════ AUDIO ═══════════════ -->
-<audio id="intro-audio" preload="none" playsinline>
-  <source src="assets/audio/intro.m4a" type="audio/mp4">
+<!-- Preloaded while the countdown runs, so it starts the instant the
+     passcode lands — that submit is the gesture the browser needs. -->
+<audio id="intro-audio" preload="auto" playsinline>
   <source src="assets/audio/intro.mp3" type="audio/mpeg">
 </audio>
 <button id="sound-toggle" class="sound-toggle" hidden aria-label="Toggle sound">
@@ -180,13 +181,13 @@
             <div class="ba">
               <div class="ba-item">
                 <p class="ba-label">Before — Notion</p>
-                <video class="ba-clip" data-src="assets/video/notion.mp4" preload="none"
+                <video class="clip ba-clip" data-src="assets/video/notion.mp4" preload="none"
                        muted loop playsinline controls disablepictureinpicture
                        controlslist="nodownload noplaybackrate"></video>
               </div>
               <div class="ba-item">
                 <p class="ba-label">After — Mintlify</p>
-                <video class="ba-clip" data-src="assets/video/mintlify.mp4" preload="none"
+                <video class="clip ba-clip" data-src="assets/video/mintlify.mp4" preload="none"
                        muted loop playsinline controls disablepictureinpicture
                        controlslist="nodownload noplaybackrate"></video>
               </div>
@@ -199,9 +200,12 @@
           <div class="big3-body">
             <h3>Forty minutes with Sebastian</h3>
             <p>Recorded a full onboarding walkthrough with Seb, then cut it into something a human being would voluntarily sit through. Plus screen recordings of every animation on the product, so the words always have something to point at.</p>
-            <figure class="work-shot">
-              <img src="assets/img/file-list.jpg" alt="A long list of recorded clips: Manage Candidates, search and filter, AI summary, Matching, Enrich…" loading="lazy">
-              <figcaption>A small sample of the clips.</figcaption>
+            <figure class="work-shot work-shot-vid">
+              <video class="clip" data-src="assets/video/onboarding.mp4" preload="none"
+                     muted loop playsinline controls disablepictureinpicture
+                     controlslist="nodownload noplaybackrate"
+                     aria-label="A cut from the onboarding walkthrough recorded with Sebastian"></video>
+              <figcaption>A cut from the walkthrough. Sound's on the player.</figcaption>
             </figure>
           </div>
         </li>
@@ -253,53 +257,41 @@
 
   <!-- ── WHAT I LEARNED ── -->
   <section class="sec sec-learn" id="learn">
-    <div class="wrap">
-      <h2 class="sec-title">And what did I <span class="hl hl-pink">actually learn</span>?</h2>
-      <p class="sec-lede">Seven weeks is not long. It was enough.</p>
+    <div class="wrap wrap-wide">
 
-      <ol class="learns">
+      <div class="learn-head">
+        <h2 class="learn-title">I learnt<span aria-hidden="true">…</span></h2>
+        <p class="learn-alot">A lot.</p>
+      </div>
 
-        <li class="learn learn-olive">
-          <span class="learn-n">01</span>
-          <div>
-            <h3>AI is leverage, not a shortcut</h3>
-            <p>Week three, Kevin told me <q>once you get the hang of MCP and API keys, your ai capabilities will 10x</q>. He was right. The trick was never asking it to do the thinking — it was knowing exactly what I wanted before I asked, and then having it done in an afternoon instead of a fortnight.</p>
-          </div>
+      <ul class="learns">
+        <li class="learn learn-olive" style="--i:0">
+          <h3>Everything AI</h3>
+          <p>I'm now super good at prompting AI, and getting it to give me the output I want</p>
         </li>
-
-        <li class="learn learn-pink">
-          <span class="learn-n">02</span>
-          <div>
-            <h3>Taste is the actual job</h3>
-            <p>The first batch of X posts got the note <q>feel really ai generated atm</q>, and that note was correct. Anyone can generate a draft now. Knowing which draft is bad, and being willing to write it again until it isn't, is the part that's still yours.</p>
-          </div>
+        <li class="learn learn-pink" style="--i:1">
+          <h3>How to code</h3>
+          <p>Well more like vibe-code, but it's still so fun for me to not have to use a middle man to get an idea out</p>
         </li>
-
-        <li class="learn learn-blue">
-          <span class="learn-n">03</span>
-          <div>
-            <h3>Writing the manual is how you learn the product</h3>
-            <p>Nobody sat me down and taught me Spott. I learned it by moving the docs out of Notion one page at a time and having to explain every screen to a stranger. You find out precisely how much you understand the moment you have to write it down.</p>
-          </div>
+        <li class="learn learn-blue" style="--i:2">
+          <h3>Startup culture</h3>
+          <p>The pace is invigorating, and I quickly learnt if I don't 80/20, nothing was going to get done</p>
         </li>
-
-        <li class="learn learn-yellow">
-          <span class="learn-n">04</span>
-          <div>
-            <h3>Startup mindset is just less friction</h3>
-            <p><q>it slows you down needing to log out → thats not startup mindset ;)</q> is the most Kevin sentence ever typed, and it turned out to be about more than logging out. Take the small obstacle away, now, rather than working around it politely for six weeks.</p>
-          </div>
+        <li class="learn learn-yellow" style="--i:3">
+          <h3>Intro to new tools</h3>
+          <p>It was fun getting to use tools I otherwise wouldn't have, like VS Code or Spott ;)</p>
         </li>
+      </ul>
 
-        <li class="learn learn-olive">
-          <span class="learn-n">05</span>
-          <div>
-            <h3>You can just start</h3>
-            <p>I came in not knowing what an ATS was, or a repo, or roughly forty percent of Kevin's Slack messages. Nobody was going to hand me permission to build, film, ship or deploy. You pick it up by doing it badly first, in public, on a deadline.</p>
-          </div>
-        </li>
+      <p class="learn-wonder">
+        <span class="learn-star" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><g stroke="#D97757" stroke-width="5" stroke-linecap="round">
+            <path d="M24 7v34M7 24h34M12 12l24 24M36 12L12 36"/>
+          </g></svg>
+        </span>
+        <span class="learn-wonder-txt">and how did you do that? I wonder…</span>
+      </p>
 
-      </ol>
     </div>
   </section>
 

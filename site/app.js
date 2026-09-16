@@ -2,6 +2,12 @@
    Debora the intern — Spott internship recap
    ══════════════════════════════════════════════════ */
 
+/* Everything lives inside this closure. Nothing here — not CONFIG, not
+   enterSite — is reachable from the console, so the gate can't be waved
+   through by typing its name at a devtools prompt. */
+(() => {
+'use strict';
+
 const CONFIG = {
   /* ┌──────────────────────────────────────────────────────┐
      │  false = no countdown, no passcode, site just opens. │
@@ -14,9 +20,12 @@ const CONFIG = {
      Change this one line to move the unlock.                     */
   unlockAt: '2026-09-16T16:30:00Z',
 
-  /* Front-door passcode. Matching is forgiving: case, spaces
-     and punctuation are all ignored — so the @ is optional.      */
-  passcode: 'debora@spott',
+  /* The passcode itself is NOT in this file. What's here is a SHA-256
+     of the normalised code, so reading the source doesn't hand it over.
+     Matching stays forgiving: case, spaces and punctuation are all
+     ignored before hashing — so the @ is optional.
+     To change it: sha256(code.toLowerCase().replace(/[^a-z0-9]/g,'')) */
+  passcodeHash: '6cc4edfa71ce6c0ab0b4869fcfe31269e87359529297a68026755f1b655e5d97',
 };
 
 /* ─────────── tiny helpers ─────────── */
@@ -24,6 +33,10 @@ const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const pad = n => String(n).padStart(2, '0');
 const softMatch = s => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+const sha256Hex = async (s) => {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+};
 
 /* ══════════════════════════════════════════════════
    1. THE GATE
@@ -49,6 +62,8 @@ const SPINNERS = [
 ]
 
 const PLEADS = [
+  "Why the countdown? Because it ends at the exact minute my internship does. Not a second before.",
+  "This clock is my last day, counted down. When it hits zero I am, officially, no longer the intern.",
   "Why the countdown? Because I am still finishing it. In the backend. Right now, probably.",
   "We are building the plane while flying it. You, of all people, know exactly what that means.",
   "Startup world is 80/20. You are currently waiting on the 20.",
@@ -81,7 +96,7 @@ function renderWhen() {
   const opts = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
   let local;
   try { local = d.toLocaleString(undefined, opts); } catch { local = d.toString(); }
-  $('#gate-when').textContent = `that's ${local}, your time`;
+  $('#gate-when').textContent = `that's ${local}, your time — the minute my internship ends`;
 }
 
 let gateTimer, flavourTimer;
@@ -109,10 +124,10 @@ const WRONG = [
 ];
 let wrongIdx = 0;
 
-$('#pass-form').addEventListener('submit', e => {
+$('#pass-form').addEventListener('submit', async e => {
   e.preventDefault();
   const input = $('#pass-input');
-  if (softMatch(input.value) === softMatch(CONFIG.passcode)) return enterSite();
+  if (await sha256Hex(softMatch(input.value)) === CONFIG.passcodeHash) return enterSite();
   $('#pass-error').textContent = WRONG[wrongIdx++ % WRONG.length];
   panelPass.classList.remove('shake');
   void panelPass.offsetWidth;
@@ -545,7 +560,7 @@ if (CONFIG.gateEnabled) {
   gateTimer = setInterval(tickGate, 1000);
 
   /* Preview hatch before launch: ?preview=1 skips the countdown but NOT the
-     passcode — only useful to someone who already knows the three words. */
+     passcode — only useful to someone who already knows the code. */
   if (new URLSearchParams(location.search).has('preview')) {
     clearInterval(gateTimer);
     showPasscode();
@@ -554,3 +569,5 @@ if (CONFIG.gateEnabled) {
   gate.remove();
   revealSite(false);        // no gesture to autoplay off, so just offer the button
 }
+
+})();

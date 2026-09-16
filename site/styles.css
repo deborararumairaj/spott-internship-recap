@@ -456,6 +456,8 @@ img,video{max-width:100%;display:block}
 /* 1112x720 — 56px of menu bar and CapCut chrome off the top. Only the
    top is cropped: the native controls live at the foot of the video. */
 .vcrop-cap{--ar:1112/664;--shift:8.434%;--vh:108.43%}
+/* 1280x720 — just the letterbox band off the top of the welcome video */
+.vcrop-welcome{--ar:1280/700;--shift:2.857%;--vh:102.86%}
 
 .ba .vcrop{box-shadow:0 6px 20px rgba(0,0,0,.18)}
 

@@ -258,7 +258,7 @@ const WEEK2 = {
       alt: 'Email: Your seat was upgraded — you now have more Claude usage',
       bub: 'pink',
       b: 'You can call me Deblaude now',
-      p: 'Claude had become an integral part of my workflow. Who would have thought?',
+      p: "Claude is the personal assistant I couldn't afford. The intern's intern, if you would ;)",
     },
   ],
 };

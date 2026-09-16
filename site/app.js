@@ -359,8 +359,18 @@ function observeAll() {
   $$('.stat-n').forEach(el => sObs.observe(el));
 
   wireQueries();
+  wireStills();
   wireReveal();
   wireBlur();
+}
+
+/* The welcome-video stills may not be in the folder yet — don't show a broken image. */
+function wireStills() {
+  $$('#stills img').forEach(img => {
+    const mark = () => img.closest('figure').classList.add('empty');
+    if (img.complete && img.naturalWidth === 0) mark();
+    img.addEventListener('error', mark);
+  });
 }
 
 /* ─────────── week 1: one query at a time, as you scroll ─────────── */

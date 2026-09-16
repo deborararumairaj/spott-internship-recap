@@ -443,26 +443,18 @@ img,video{max-width:100%;display:block}
 
 /* ─────────── WORK ─────────── */
 .sec-work{background:var(--cream-2)}
-.stats{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:14px;margin:clamp(30px,5vw,50px) 0 clamp(30px,5vw,50px);
-}
-.stat{background:#fff;border-radius:16px;padding:22px 20px}
-.stat-n{display:block;font-family:var(--mono);font-size:clamp(30px,5vw,44px);font-weight:500;line-height:1;font-variant-numeric:tabular-nums;color:var(--accent)}
-.stat:nth-child(1) .stat-n{color:var(--olive-dk)}
-.stat:nth-child(2) .stat-n{color:var(--blue-dk)}
-.stat:nth-child(3) .stat-n{color:var(--accent)}
-.stat:nth-child(4) .stat-n{color:var(--yellow-dk)}
-.stat:nth-child(5) .stat-n{color:var(--olive-dk)}
-.stat-l{display:block;margin-top:10px;font-size:13px;font-weight:600;line-height:1.4;color:rgba(27,66,105,.66)}
 
-.work-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+
+
+
+
+
 .card{
   border-radius:var(--r);padding:26px;
   display:flex;flex-direction:column;gap:11px;
   box-shadow:0 8px 26px rgba(27,66,105,.1);
 }
-.card-wide{grid-column:1/-1}
+
 .card h3{font-size:clamp(20px,2.7vw,26px);font-weight:800;letter-spacing:-.022em;line-height:1.18;margin:0}
 .card p{margin:0;font-size:15.5px;line-height:1.58}
 .card-tag{
@@ -570,7 +562,6 @@ img,video{max-width:100%;display:block}
   .clock{gap:8px}
   .pill-rail{top:0;padding:10px 0}
   .search-pill{padding:11px 15px}
-  .stats{grid-template-columns:1fr 1fr}
   .card{padding:22px}
 }
 
@@ -635,4 +626,57 @@ img,video{max-width:100%;display:block}
 /* the logo + word can't hold one line on a phone — must come after the base rule */
 @media (max-width:900px){
   .spott-line{white-space:normal}
+}
+
+/* ─────────── THE WORK ─────────── */
+.work-lede{
+  font-size:clamp(20px,3.4vw,34px);font-weight:800;letter-spacing:-.025em;
+  margin:0 0 clamp(26px,4vw,40px);color:rgba(27,66,105,.75);
+}
+.work-lede em{font-style:normal;background:var(--yellow);padding:0 .18em;border-radius:6px;color:var(--navy-deep)}
+.work-lead{width:fit-content;max-width:min(100%,520px);margin:0 0 clamp(40px,7vw,72px)}
+
+.big3{list-style:none;margin:0 0 clamp(56px,9vw,100px);padding:0;
+  display:flex;flex-direction:column;gap:clamp(44px,7vw,84px)}
+.big3-item{display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,34px);align-items:start}
+.big3-n{
+  font-family:var(--mono);font-size:clamp(15px,2vw,19px);font-weight:500;
+  width:clamp(48px,7vw,66px);height:clamp(48px,7vw,66px);flex:none;
+  display:grid;place-items:center;border-radius:50%;color:var(--navy-deep);
+}
+.big3-n-olive{background:var(--olive);color:#fff}
+.big3-n-pink{background:var(--pink)}
+.big3-n-yellow{background:var(--yellow)}
+.big3-body{min-width:0}
+.big3-body h3{font-size:clamp(23px,3.8vw,38px);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:.15em 0 .45em}
+.big3-body > p{font-size:clamp(15.5px,2vw,17.5px);line-height:1.6;margin:0 0 22px;max-width:40em;color:rgba(27,66,105,.84)}
+
+.work-shot{margin:0;max-width:560px;border-radius:14px;overflow:hidden;
+  box-shadow:0 10px 30px rgba(27,66,105,.16);background:#fff}
+.work-shot img{width:100%}
+.work-shot figcaption{padding:11px 15px;font-size:13px;font-weight:600;color:rgba(27,66,105,.62)}
+
+.stills{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:760px}
+.stills figure{margin:0;border-radius:14px;overflow:hidden;background:var(--cream);
+  box-shadow:0 8px 24px rgba(27,66,105,.14);aspect-ratio:4/3}
+.stills img{width:100%;height:100%;object-fit:cover}
+/* until the stills are dropped in, show an honest empty slot rather than a broken icon */
+.stills figure.empty{display:grid;place-items:center;box-shadow:none;
+  border:2px dashed rgba(27,66,105,.22);background:transparent}
+.stills figure.empty::after{content:'still dropping in';font-size:12px;font-weight:600;
+  color:rgba(27,66,105,.4);text-align:center;padding:0 10px}
+.stills figure.empty img{display:none}
+
+.small-head{font-size:clamp(20px,3vw,30px);font-weight:800;letter-spacing:-.025em;
+  margin:0 0 clamp(20px,3vw,30px)}
+.small-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+
+@media (max-width:760px){
+  .big3-item{grid-template-columns:1fr;gap:12px}
+  .stills{grid-template-columns:1fr 1fr}
+}
+
+/* bubble labels can't hold one line on a phone */
+@media (max-width:760px){
+  .bub b{white-space:normal}
 }

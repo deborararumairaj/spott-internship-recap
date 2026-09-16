@@ -435,7 +435,25 @@ img,video{max-width:100%;display:block}
 
 .ba{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;max-width:620px}
 .ba-label{font-size:12px!important;font-weight:800!important;letter-spacing:.09em;text-transform:uppercase;margin:0 0 8px!important;opacity:.78}
-.ba video{width:100%;display:block;border-radius:12px;background:var(--navy-deep);box-shadow:0 6px 20px rgba(0,0,0,.18);aspect-ratio:1108/720}
+/* The clips still carry the macOS menu bar (and CapCut's own chrome) at
+   the top of the recording. Rather than re-encode them, each sits in a
+   window that shows only the part worth seeing. --ar is the visible
+   ratio, --shift how far the video rides up, as a % of that window. */
+.vcrop{
+  position:relative;width:100%;aspect-ratio:var(--ar);overflow:hidden;
+  border-radius:12px;background:var(--navy-deep);
+}
+/* height is pinned rather than auto: the element is sized before the
+   video's metadata arrives, and auto would collapse it to 150px. */
+.vcrop video{position:absolute;left:0;width:100%;display:block;
+  top:calc(var(--shift) * -1);height:var(--vh)}
+/* 1108x720 — 28px of macOS menu bar off the top */
+.vcrop-browser{--ar:1108/692;--shift:4.046%;--vh:104.05%}
+/* 1112x720 — 56px of menu bar and CapCut chrome off the top. Only the
+   top is cropped: the native controls live at the foot of the video. */
+.vcrop-cap{--ar:1112/664;--shift:8.434%;--vh:108.43%}
+
+.ba .vcrop{box-shadow:0 6px 20px rgba(0,0,0,.18)}
 
 /* ─────────── WHAT I LEARNED ─────────── */
 /* Straight off her deck slide: "I learnt… / A lot.", then four cards
@@ -547,6 +565,9 @@ img,video{max-width:100%;display:block}
 .miss-olive .miss-tick,.miss-blue .miss-tick{color:#fff}
 .is-picked .miss-tick{opacity:1;transform:none}
 .miss-shot img{width:100%;height:100%;object-fit:cover;display:block}
+/* a 4:5 crop of the team photo centres on the back row and loses her —
+   she's seated front left, so hold the frame over there */
+.miss-pick[data-key="team"] .miss-shot img{object-position:18% center}
 /* until the photo lands */
 .miss-shot.empty{
   background:transparent;border:2px dashed rgba(27,66,105,.22);box-shadow:none;
@@ -722,7 +743,7 @@ img,video{max-width:100%;display:block}
 .work-shot{margin:0;max-width:560px;border-radius:14px;overflow:hidden;
   box-shadow:0 10px 30px rgba(27,66,105,.16);background:#fff}
 .work-shot img{width:100%}
-.work-shot-vid video{width:100%;display:block;background:var(--navy-deep);aspect-ratio:1112/720}
+.work-shot-vid .vcrop{border-radius:0}
 .work-shot figcaption{padding:11px 15px;font-size:13px;font-weight:600;color:rgba(27,66,105,.62)}
 
 .stills{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:760px}

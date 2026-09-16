@@ -443,6 +443,13 @@ function wireClips() {
 
 /* The welcome-video stills may not be in the folder yet — don't show a broken image. */
 function wireStills() {
+  /* the miss grid shows a dashed slot until each photo lands */
+  $$('.miss-shot img').forEach(img => {
+    const mark = () => img.closest('figure').classList.add('empty');
+    if (img.complete && img.naturalWidth === 0) mark();
+    img.addEventListener('error', mark);
+  });
+
   /* the aside shot simply isn't there until the screenshot lands */
   $$('.aside-shot img').forEach(img => {
     const hide = () => img.closest('figure').hidden = true;

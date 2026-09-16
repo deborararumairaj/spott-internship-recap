@@ -224,25 +224,36 @@ function renderQ([src, text, mod]) {
 }
 
 const WEEK1 = {
-  n: 1,
   title: 'Absolutely no idea what is happening',
-  note: 'I had a laptop, a Slack account, and a job title with a letter combination in it that I had to look up.',
+  note: 'I was thrown into the deep end.',
   qs: [
     ['google',  'what is a repository'],
     ['chatgpt', 'how do i set up a github'],
     ['google',  'what is an ATS'],
     ['google',  'what is a recruitment agency'],
     ['claude',  'what does Kevin mean by “put it in ordinal”'],
-    ['google',  'tech bro words i can use to sound like i know things'],
+    ['google',  'what does GTM stand for'],
     ['chatgpt', 'what is a JSON file'],
     ['google',  'what even is recruitment, like fundamentally'],
+    ['claude',  'explain what this company actually sells, like i am five'],
+    ['google',  'what is a CRM'],
+    ['chatgpt', 'how do i clone a repo'],
+    ['google',  'tech bro words i can use to sound like i know things'],
+    ['claude',  'what is the difference between a branch and a fork'],
+    ['google',  'basic terminal commands list'],
+    ['chatgpt', 'what does “ship it” actually mean at a startup'],
+    ['google',  'what is YC'],
+    ['claude',  'is “let us circle back” something people genuinely say'],
+    ['google',  'what is an API'],
+    ['chatgpt', 'how to sound confident in a standup meeting'],
+    ['claude',  'what does Kevin mean by <em>this</em>'],
+    ['google',  'how long until you stop feeling like an impostor at a new job'],
     ['claude',  'is it normal to understand absolutely nothing on day three', 'punch'],
   ],
 };
 
 const WEEK2 = {
-  n: 2,
-  title: "By now I'm a pro. At Claude, and at Spott.",
+  title: "Now I'm a pro. At Claude, and at Spott.",
   note: 'Two weeks in and I had opinions. Some of them were even correct.',
   beats: [
     {
@@ -256,44 +267,52 @@ const WEEK2 = {
       img: 'assets/img/seat-upgraded.jpg',
       alt: 'Email: Your seat was upgraded — you now have more Claude usage',
       bub: 'pink',
-      b: 'Also by now, they had to upgrade my Claude',
-      p: 'I was, let us say, using it.',
+      b: 'You can call me Debloed now',
+      p: 'Claude had become an integral part of my workflow. Who would have thought?',
     },
   ],
 };
+
+function weekHead(n, w) {
+  return `<div class="wk-head">
+    <div class="wk-head-in">
+      <p class="week-num">Week ${n}</p>
+      <h3 class="week-title">${w.title}</h3>
+      <p class="week-note">${w.note}</p>
+    </div>
+  </div>`;
+}
 
 function buildWeeks() {
   const root = $('#weeks-root');
   const frag = document.createDocumentFragment();
 
-  /* week 1 — the questions */
-  const w1 = document.createElement('div');
-  w1.className = 'wrap wrap-wide week week-1';
+  /* week 1 — a field of questions coming at you from every side */
+  const w1 = document.createElement('section');
+  w1.className = 'wk wk-1';
   w1.innerHTML = `
-    <div class="week-left">
-      <p class="week-num">Week 1</p>
-      <h3 class="week-title">${WEEK1.title}</h3>
-      <p class="week-note">${WEEK1.note}</p>
-    </div>
-    <div class="q-stack">${WEEK1.qs.map(renderQ).join('')}</div>`;
+    ${weekHead(1, WEEK1)}
+    <div class="wrap wrap-wide">
+      <div class="wk-field">${WEEK1.qs.map(renderQ).join('')}</div>
+    </div>`;
   frag.appendChild(w1);
 
-  /* week 2 — the two moments */
-  const w2 = document.createElement('div');
-  w2.className = 'wrap wrap-wide week week-2';
+  /* week 2 — two moments, each with a bubble coming off the screenshot */
+  const w2 = document.createElement('section');
+  w2.className = 'wk wk-2';
   w2.innerHTML = `
-    <div class="week-left">
-      <p class="week-num">Week 2</p>
-      <h3 class="week-title">${WEEK2.title}</h3>
-      <p class="week-note">${WEEK2.note}</p>
-    </div>
-    <div class="q-stack">
-      ${WEEK2.beats.map(x => `
-        <figure class="beat">
-          <img src="${x.img}" alt="${x.alt}" loading="lazy">
-        </figure>
-        <div class="bub bub-${x.bub}"><b>${x.b}</b><span>${x.p}</span></div>
-      `).join('')}
+    ${weekHead(2, WEEK2)}
+    <div class="wrap">
+      <div class="wk-beats">
+        ${WEEK2.beats.map(x => `
+          <div class="beat-wrap">
+            <figure class="beat">
+              <span class="beat-chrome" aria-hidden="true"><i></i><i></i><i></i></span>
+              <img src="${x.img}" alt="${x.alt}" loading="lazy">
+            </figure>
+            <div class="bub bub-${x.bub} bub-up beat-bub"><b>${x.b}</b><span>${x.p}</span></div>
+          </div>`).join('')}
+      </div>
     </div>`;
   frag.appendChild(w2);
 
@@ -312,9 +331,9 @@ function observeAll() {
       }
       qObs.unobserve(e.target);
     });
-  }, { rootMargin: '-40% 0px -25% 0px' });
+  }, { rootMargin: '-12% 0px -18% 0px' });
 
-  $$('.q, .beat, .week .bub').forEach(el => qObs.observe(el));
+  $$('.q, .beat-wrap, .bub-hero').forEach(el => qObs.observe(el));
 
   /* stat counters */
   const sObs = new IntersectionObserver((entries) => {
@@ -337,6 +356,22 @@ function observeAll() {
 
   wireReveal();
   wireBlur();
+  settleCounter();
+}
+
+/* If you scroll fast enough, the observer misses a few. Land on the real number. */
+function settleCounter() {
+  const total = WEEK1.qs.length;
+  const blur  = $('#blur');
+  if (!blur) return;
+  new IntersectionObserver((e, o) => {
+    if (!e[0].isIntersecting || asked >= total) return;
+    o.disconnect();
+    const iv = setInterval(() => {
+      $('#qcount').textContent = ++asked;
+      if (asked >= total) clearInterval(iv);
+    }, 45);
+  }, { rootMargin: '0px 0px -40% 0px' }).observe(blur);
 }
 
 /* ─────────── "wondering how I got into Spott?" ─────────── */
@@ -354,9 +389,10 @@ function wireReveal() {
 }
 
 /* ─────────── weeks 3 → now, blurring past ─────────── */
-const BLUR_SEQ = ['3', '4', '5', '6', '7', 'now'];
+const BLUR_SEQ = ['3', '4', '5', '6', '7', 'blink', 'now'];
 function wireBlur() {
   const sec  = $('#blur');
+  const word = $('#blur-word');
   const num  = $('#blur-num');
   const pre  = $('#blur-pre');
   const post = $('#blur-post');
@@ -369,21 +405,35 @@ function wireBlur() {
     if (span <= 0) return;
     const p = Math.min(1, Math.max(0, -r.top / span));
 
-    /* ease so the early weeks fly and it lands hard on "now" */
-    const eased = Math.pow(p, .62);
-    const i = Math.min(BLUR_SEQ.length - 1, Math.floor(eased * BLUR_SEQ.length));
+    /* the numbers rattle past quickly, then it holds on "now" */
+    const i = Math.min(BLUR_SEQ.length - 1, Math.floor(Math.pow(p, .8) * BLUR_SEQ.length));
     if (i === last) return;
     last = i;
 
-    const isNow = BLUR_SEQ[i] === 'now';
-    num.textContent = BLUR_SEQ[i];
-    num.classList.toggle('is-now', isNow);
-    pre.textContent  = isNow ? 'and suddenly it was' : 'and then week';
-    post.textContent = isNow ? "…and that's today." : '…and I blinked.';
+    const v = BLUR_SEQ[i];
+    sec.classList.toggle('is-blink', v === 'blink');
+    sec.classList.toggle('is-now',   v === 'now');
+
+    if (v === 'blink') {
+      word.textContent = '';
+      num.textContent  = 'and I blinked';
+      pre.textContent  = '';
+      post.textContent = '';
+    } else if (v === 'now') {
+      word.textContent = '';
+      num.textContent  = 'now';
+      pre.textContent  = 'and suddenly it was';
+      post.textContent = "…and that's today.";
+    } else {
+      word.textContent = 'Week';
+      num.textContent  = v;
+      pre.textContent  = '';
+      post.textContent = '';
+    }
     num.classList.remove('tick'); void num.offsetWidth; num.classList.add('tick');
   };
 
-  window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 }
 

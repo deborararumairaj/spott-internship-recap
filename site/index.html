@@ -272,42 +272,71 @@
   <section class="sec sec-miss" id="miss">
     <div class="wrap wrap-wide">
       <h2 class="sec-title">What do you think I'm going to <span class="hl hl-yellow">miss the most</span>?</h2>
-      <p class="sec-lede">All of it, obviously. But if you're going to make me pick.</p>
+      <p class="sec-lede">Go on. Pick them, then hit submit.</p>
 
-      <ul class="miss">
+      <ul class="miss" id="miss-grid">
         <li class="miss-item miss-olive">
-          <figure class="miss-shot"><img src="assets/img/miss-merge.jpg" alt="The merge" loading="lazy"></figure>
-          <p class="miss-label">The merge</p>
+          <button type="button" class="miss-pick" aria-pressed="false" data-key="merge">
+            <figure class="miss-shot"><img src="assets/img/miss-merge.jpg" alt="" loading="lazy"></figure>
+            <span class="miss-label">The merge</span>
+            <span class="miss-tick" aria-hidden="true">✓</span>
+          </button>
         </li>
         <li class="miss-item miss-pink">
-          <figure class="miss-shot"><img src="assets/img/miss-food.jpg" alt="The food" loading="lazy"></figure>
-          <p class="miss-label">The food</p>
+          <button type="button" class="miss-pick" aria-pressed="false" data-key="food">
+            <figure class="miss-shot"><img src="assets/img/miss-food.jpg" alt="" loading="lazy"></figure>
+            <span class="miss-label">The food</span>
+            <span class="miss-tick" aria-hidden="true">✓</span>
+          </button>
         </li>
         <li class="miss-item miss-blue">
-          <figure class="miss-shot"><img src="assets/img/miss-macbook.jpg" alt="The MacBook M4 Pro" loading="lazy"></figure>
-          <p class="miss-label">The MacBook M4 Pro</p>
+          <button type="button" class="miss-pick" aria-pressed="false" data-key="macbook">
+            <figure class="miss-shot"><img src="assets/img/miss-macbook.jpg" alt="" loading="lazy"></figure>
+            <span class="miss-label">The MacBook M4 Pro</span>
+            <span class="miss-tick" aria-hidden="true">✓</span>
+          </button>
         </li>
         <li class="miss-item miss-yellow">
-          <figure class="miss-shot"><img src="assets/img/miss-team.jpg" alt="The team" loading="lazy"></figure>
-          <p class="miss-label">The team</p>
+          <button type="button" class="miss-pick" aria-pressed="false" data-key="team">
+            <figure class="miss-shot"><img src="assets/img/miss-team.jpg" alt="" loading="lazy"></figure>
+            <span class="miss-label">The team</span>
+            <span class="miss-tick" aria-hidden="true">✓</span>
+          </button>
         </li>
         <li class="miss-item miss-olive">
-          <figure class="miss-shot"><img src="assets/img/miss-vlogs.jpg" alt="Dimitri's vlogs" loading="lazy"></figure>
-          <p class="miss-label">Dimitri's vlogs</p>
+          <button type="button" class="miss-pick" aria-pressed="false" data-key="vlogs">
+            <figure class="miss-shot"><img src="assets/img/miss-vlogs.jpg" alt="" loading="lazy"></figure>
+            <span class="miss-label">Dimitri's vlogs</span>
+            <span class="miss-tick" aria-hidden="true">✓</span>
+          </button>
         </li>
         <li class="miss-item miss-pink">
-          <figure class="miss-shot"><img src="assets/img/miss-memes.jpg" alt="Bill's memes" loading="lazy"></figure>
-          <p class="miss-label">Bill's memes</p>
+          <button type="button" class="miss-pick" aria-pressed="false" data-key="memes">
+            <figure class="miss-shot"><img src="assets/img/miss-memes.jpg" alt="" loading="lazy"></figure>
+            <span class="miss-label">Bill's memes</span>
+            <span class="miss-tick" aria-hidden="true">✓</span>
+          </button>
         </li>
         <li class="miss-item miss-blue">
-          <figure class="miss-shot"><img src="assets/img/miss-coffee-cup.jpg" alt="The coffee cup, every time there’s a bet or a fight" loading="lazy"></figure>
-          <p class="miss-label">The coffee cup, every time there’s a bet or a fight</p>
+          <button type="button" class="miss-pick" aria-pressed="false" data-key="coffee-cup">
+            <figure class="miss-shot"><img src="assets/img/miss-coffee-cup.jpg" alt="" loading="lazy"></figure>
+            <span class="miss-label">The coffee cup, every time there’s a bet or a fight</span>
+            <span class="miss-tick" aria-hidden="true">✓</span>
+          </button>
         </li>
         <li class="miss-item miss-yellow">
-          <figure class="miss-shot"><img src="assets/img/miss-kinder.jpg" alt="Kinder Bueno" loading="lazy"></figure>
-          <p class="miss-label">Kinder Bueno</p>
+          <button type="button" class="miss-pick" aria-pressed="false" data-key="kinder">
+            <figure class="miss-shot"><img src="assets/img/miss-kinder.jpg" alt="" loading="lazy"></figure>
+            <span class="miss-label">Kinder Bueno</span>
+            <span class="miss-tick" aria-hidden="true">✓</span>
+          </button>
         </li>
       </ul>
+
+      <div class="miss-foot">
+        <button type="button" class="miss-submit" id="miss-submit">Submit</button>
+        <p class="miss-verdict" id="miss-verdict" role="status"></p>
+      </div>
     </div>
   </section>
 

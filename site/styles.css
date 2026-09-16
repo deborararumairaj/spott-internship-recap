@@ -508,7 +508,14 @@ img,video{max-width:100%;display:block}
   display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
   gap:clamp(16px,2.4vw,28px);
 }
-.miss-item{--c:var(--olive);display:flex;flex-direction:column;gap:12px}
+.miss-item{--c:var(--olive)}
+.miss-pick{
+  display:flex;flex-direction:column;gap:12px;width:100%;position:relative;
+  font:inherit;text-align:left;cursor:pointer;
+  background:none;border:0;padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.miss-pick:focus-visible{outline:3px solid var(--c);outline-offset:6px;border-radius:20px}
 .miss-olive{--c:var(--olive)}
 .miss-pink{--c:var(--pink)}
 .miss-blue{--c:var(--blue)}
@@ -516,7 +523,29 @@ img,video{max-width:100%;display:block}
 .miss-shot{
   margin:0;aspect-ratio:4/5;border-radius:18px;overflow:hidden;
   background:var(--c);box-shadow:0 8px 24px rgba(27,66,105,.14);
+  transition:transform .22s var(--ease),box-shadow .22s var(--ease),filter .22s;
 }
+.miss-pick:hover .miss-shot{transform:translateY(-4px)}
+/* unpicked reads quieter, so a pick is obvious */
+.miss-shot img{filter:grayscale(.34);opacity:.82;transition:filter .22s,opacity .22s}
+.is-picked .miss-shot img{filter:none;opacity:1}
+.is-picked .miss-shot{
+  transform:translateY(-4px);
+  box-shadow:0 0 0 4px var(--c),0 14px 30px rgba(27,66,105,.2);
+}
+
+/* the tick that lands on a picked tile */
+.miss-tick{
+  position:absolute;top:10px;right:10px;
+  width:30px;height:30px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--c);color:var(--navy-deep);
+  font-size:15px;font-weight:800;line-height:1;
+  opacity:0;transform:scale(.5);
+  transition:opacity .18s var(--ease),transform .18s var(--ease);
+}
+.miss-olive .miss-tick,.miss-blue .miss-tick{color:#fff}
+.is-picked .miss-tick{opacity:1;transform:none}
 .miss-shot img{width:100%;height:100%;object-fit:cover;display:block}
 /* until the photo lands */
 .miss-shot.empty{
@@ -529,13 +558,33 @@ img,video{max-width:100%;display:block}
   text-transform:uppercase;color:rgba(27,66,105,.38);
 }
 .miss-label{
-  margin:0;font-size:clamp(14.5px,1.6vw,17px);font-weight:800;
+  display:block;margin:0;font-size:clamp(14.5px,1.6vw,17px);font-weight:800;
   letter-spacing:-.018em;line-height:1.28;color:var(--navy-deep);
 }
 .miss-label::before{
   content:'';display:inline-block;vertical-align:.08em;
   width:9px;height:9px;border-radius:50%;background:var(--c);margin-right:8px;
 }
+
+/* submit + verdict */
+.miss-foot{
+  display:flex;align-items:center;gap:clamp(14px,2.2vw,24px);flex-wrap:wrap;
+  margin-top:clamp(28px,4vw,44px);
+}
+.miss-submit{
+  font-family:var(--font);font-size:17px;font-weight:700;cursor:pointer;
+  background:var(--navy-deep);color:var(--cream);border:0;
+  padding:15px 34px;border-radius:14px;
+  transition:transform .15s var(--ease),filter .2s;
+}
+.miss-submit:hover{transform:translateY(-2px);filter:brightness(1.12)}
+.miss-submit:disabled{cursor:default;opacity:.5;transform:none}
+.miss-verdict{
+  margin:0;font-size:clamp(15px,1.9vw,18px);font-weight:700;letter-spacing:-.015em;
+}
+.miss-verdict.is-wrong{color:var(--pink-dk)}
+.miss-verdict.is-right{color:var(--olive-dk)}
+.miss.is-solved .miss-pick{cursor:default}
 
 @media (max-width:900px){ .miss{grid-template-columns:1fr 1fr} }
 @media (max-width:460px){ .miss{grid-template-columns:1fr;gap:18px} }

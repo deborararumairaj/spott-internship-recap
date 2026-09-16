@@ -329,8 +329,56 @@ function observeAll() {
   wireQueries();
   wireStills();
   wireClips();
+  wireMiss();
   wireReveal();
   wireBlur();
+}
+
+/* ─────────── what she'll miss ───────────
+   There is exactly one right answer and it is all of them. Anything
+   short of the full set gets told off and the picks stay put, so you
+   can keep adding rather than starting over. */
+const MISS_WRONG = [
+  "Nope, you're wrong. Try again.",
+  "Not even close. Try again.",
+  "Wrong. There's more to it than that.",
+  "Still wrong. Think bigger.",
+];
+
+function wireMiss() {
+  const grid = $('#miss-grid');
+  const btn = $('#miss-submit');
+  const verdict = $('#miss-verdict');
+  if (!grid || !btn || !verdict) return;
+
+  const picks = $$('.miss-pick', grid);
+  let wrongIdx = 0;
+
+  picks.forEach(p => p.addEventListener('click', () => {
+    const on = p.getAttribute('aria-pressed') === 'true';
+    p.setAttribute('aria-pressed', String(!on));
+    p.closest('.miss-item').classList.toggle('is-picked', !on);
+    verdict.textContent = '';
+    verdict.className = 'miss-verdict';
+  }));
+
+  btn.addEventListener('click', () => {
+    const chosen = picks.filter(p => p.getAttribute('aria-pressed') === 'true').length;
+
+    if (chosen === picks.length) {
+      verdict.textContent = 'Correct. All of it. Obviously.';
+      verdict.className = 'miss-verdict is-right';
+      grid.classList.add('is-solved');
+      btn.disabled = true;
+      return;
+    }
+
+    verdict.textContent = MISS_WRONG[wrongIdx++ % MISS_WRONG.length];
+    verdict.className = 'miss-verdict is-wrong';
+    btn.classList.remove('shake');
+    void btn.offsetWidth;
+    btn.classList.add('shake');
+  });
 }
 
 /* ─────────── the clips ───────────

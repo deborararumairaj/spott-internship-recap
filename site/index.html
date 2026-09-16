@@ -23,50 +23,23 @@
 
     <div class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
-    <!-- COUNTDOWN STATE -->
-    <div id="gate-countdown" class="gate-panel">
-      <p class="gate-kicker">Debora's internship recap</p>
-      <h1 class="gate-title">Unlocks in</h1>
-
-      <div class="clock" id="clock" role="timer" aria-live="off">
-        <div class="clock-unit"><span class="clock-num" id="cd-h">--</span><span class="clock-lbl">hours</span></div>
-        <div class="clock-sep">:</div>
-        <div class="clock-unit"><span class="clock-num" id="cd-m">--</span><span class="clock-lbl">minutes</span></div>
-        <div class="clock-sep">:</div>
-        <div class="clock-unit"><span class="clock-num" id="cd-s">--</span><span class="clock-lbl">seconds</span></div>
-      </div>
-
+    <div id="gate-passcode" class="gate-panel">
+      <h1 class="gate-title">Unlocks</h1>
       <p class="gate-when" id="gate-when"></p>
 
-      <div class="spinner-line">
-        <span class="spinner-star">✳</span>
-        <span id="spinner-word">Tinkering…</span>
-        <span class="spinner-meta" id="spinner-meta">(still thinking)</span>
-      </div>
-
-      <p class="gate-plead" id="gate-plead">The clock isn't arbitrary. It runs out at the exact minute my internship does — it didn't feel right to let you read this a second before.</p>
-
-      <p class="gate-fineprint">“Claude, make this unhackable. Spott has a team of really smart people.”</p>
-    </div>
-
-    <!-- PASSCODE STATE -->
-    <div id="gate-passcode" class="gate-panel" hidden>
-      <p class="gate-kicker">It's time</p>
-      <h1 class="gate-title">What's the passcode?</h1>
       <form id="pass-form" class="pass-form" autocomplete="off">
-        <input id="pass-input" class="pass-input" type="text" placeholder="the passcode" aria-label="Passcode" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <input id="pass-input" class="pass-input" type="text" placeholder="Enter your password here" aria-label="Password" autocapitalize="off" autocorrect="off" spellcheck="false">
         <button class="pass-btn" type="submit">Enter</button>
       </form>
       <p class="pass-error" id="pass-error" role="alert"></p>
-      <p class="gate-fineprint">Turn your sound on. Seriously, turn your sound on.</p>
     </div>
 
   </div>
 </div>
 
 <!-- ═══════════════ AUDIO ═══════════════ -->
-<!-- Preloaded while the countdown runs, so it starts the instant the
-     passcode lands — that submit is the gesture the browser needs. -->
+<!-- Preloaded up front, so it starts the instant the password lands —
+     that submit is the gesture the browser needs. -->
 <audio id="intro-audio" preload="auto" playsinline>
   <source src="assets/audio/intro.mp3" type="audio/mpeg">
 </audio>

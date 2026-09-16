@@ -54,76 +54,15 @@ const isGoodCode = async (raw) => {
    ══════════════════════════════════════════════════ */
 
 const gate      = $('#gate');
-const panelDown = $('#gate-countdown');
 const panelPass = $('#gate-passcode');
 const unlockTs  = new Date(CONFIG.unlockAt).getTime();
-
-/* Playful "please wait" lines. Half of these are real Claude Code
-   spinner words, which is the joke. */
-const SPINNERS = [
-  ['Tinkering…',        '(still thinking)'],
-  ['Shenaniganing…',    '(17s · ↓ 550 tokens)'],
-  ['Synthesizing…',     '(1m 34s · still thinking)'],
-  ['Crunching…',        '(1h 18m 33s and counting)'],
-  ['Building builds…',  '(in the background)'],
-  ['Shipping…',         '(80% of it, anyway)'],
-  ['Deploying…',        '(mid-flight)'],
-  ['Percolating…',      '(do not refresh)'],
-  ['Iterating…',        '(on the thing you are waiting for)'],
-]
-
-const PLEADS = [
-  "Why the countdown? Because it ends at the exact minute my internship does. Not a second before.",
-  "This clock is my last day, counted down. When it hits zero I am, officially, no longer the intern.",
-  "Why the countdown? Because I am still finishing it. In the backend. Right now, probably.",
-  "We are building the plane while flying it. You, of all people, know exactly what that means.",
-  "Startup world is 80/20. You are currently waiting on the 20.",
-  "I could have shipped it half-done. I did. That's what this screen is.",
-  "This isn't loading. It's being written. The difference is me, typing.",
-  "Somewhere in this file is an encrypted message with your name on it. It also isn't finished.",
-  "You are early. That is a compliment and an inconvenience.",
-  "Please wait. It's tinkering. It genuinely cannot be rushed.",
-]
-
-let spinIdx = 0, pleadIdx = 0;
-function rotateFlavour() {
-  const word = $('#spinner-word'), meta = $('#spinner-meta'), plead = $('#gate-plead');
-  if (!word || !meta || !plead) return;          // gate is gone; nothing to rotate
-
-  const [w, m] = SPINNERS[spinIdx++ % SPINNERS.length];
-  word.textContent = w;
-  meta.textContent = m;
-
-  plead.style.opacity = '0';
-  setTimeout(() => {
-    if (!plead.isConnected) return;
-    plead.textContent = PLEADS[pleadIdx++ % PLEADS.length];
-    plead.style.opacity = '';
-  }, 320);
-}
 
 function renderWhen() {
   const d = new Date(unlockTs);
   const opts = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
   let local;
   try { local = d.toLocaleString(undefined, opts); } catch { local = d.toString(); }
-  $('#gate-when').textContent = `that's ${local}, your time — the minute my internship ends`;
-}
-
-let gateTimer, flavourTimer;
-function tickGate() {
-  const left = unlockTs - Date.now();
-  if (left <= 0) { clearInterval(gateTimer); showPasscode(); return; }
-  const s = Math.floor(left / 1000);
-  $('#cd-h').textContent = pad(Math.floor(s / 3600));   // total hours, no days column
-  $('#cd-m').textContent = pad(Math.floor(s / 60) % 60);
-  $('#cd-s').textContent = pad(s % 60);
-}
-
-function showPasscode() {
-  panelDown.hidden = true;
-  panelPass.hidden = false;
-  setTimeout(() => $('#pass-input').focus(), 420);
+  $('#gate-when').textContent = `${local} — the minute my internship officially ends`;
 }
 
 const WRONG = [
@@ -185,8 +124,6 @@ function revealSite(autoplayAudio) {
 }
 
 function enterSite() {
-  clearInterval(gateTimer);
-  clearInterval(flavourTimer);
   gate.classList.add('is-gone');
   setTimeout(() => gate.remove(), 900);
   revealSite(true);
@@ -572,27 +509,12 @@ window.addEventListener('scroll', onScroll, { passive: true });
 
 if (CONFIG.gateEnabled) {
   renderWhen();
-  rotateFlavour();
-  flavourTimer = setInterval(rotateFlavour, 4200);
-  tickGate();
-  gateTimer = setInterval(tickGate, 1000);
 
-  /* Two hatches before launch, both useless without a code.
-     ?preview=1        → skips the countdown, still asks for the code.
-     ?code=<the code>  → walks straight in, for testing on a phone.
-     A code in a URL ends up in history and referrers, so the link is
-     for her, not for sharing. */
+  /* ?code=<code> walks straight in, for checking it on a phone. A code
+     in a URL lands in history and referrers, so that link is hers. */
   const qs = new URLSearchParams(location.search);
-  if (qs.has('preview')) {
-    clearInterval(gateTimer);
-    showPasscode();
-  }
   if (qs.has('code')) {
-    isGoodCode(qs.get('code')).then(ok => {
-      if (!ok) return;
-      clearInterval(gateTimer);
-      enterSite();
-    });
+    isGoodCode(qs.get('code')).then(ok => { if (ok) enterSite(); });
   }
 } else {
   gate.remove();

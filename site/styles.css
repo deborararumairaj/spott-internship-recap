@@ -227,6 +227,7 @@ img,video{max-width:100%;display:block}
     radial-gradient(1100px 520px at 88% -8%,rgba(107,163,222,.24),transparent 62%),
     radial-gradient(820px 480px at 2% 104%,rgba(244,184,212,.32),transparent 60%);
 }
+.hero-grid > *{min-width:0}
 .hero-grid{display:grid;grid-template-columns:1.35fr .8fr;gap:clamp(24px,5vw,60px);align-items:center}
 .hero-title{
   font-size:clamp(34px,6.6vw,68px);font-weight:800;letter-spacing:-.035em;line-height:1.04;
@@ -331,16 +332,6 @@ img,video{max-width:100%;display:block}
 /* ─────────── WEEKS ─────────── */
 .sec-weeks{padding-bottom:0}
 
-.count-rail{position:sticky;top:0;z-index:45;padding:14px 0 12px;
-  background:linear-gradient(var(--cream) 70%,rgba(253,241,227,0));
-  margin-top:clamp(24px,4vw,40px);}
-.count-rail .wrap{display:flex;justify-content:flex-end}
-.qcount{display:flex;align-items:baseline;gap:7px;
-  background:var(--navy);color:var(--cream);padding:9px 16px;border-radius:999px;}
-.qcount-n{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums;font-weight:500}
-.qcount-l{font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;font-weight:600;opacity:.62}
-
-/* ─────────── a week ─────────── */
 .wk{position:relative;padding-bottom:clamp(50px,9vw,120px)}
 
 .wk-head{position:sticky;top:0;z-index:30;padding:clamp(20px,4vw,40px) var(--gut) clamp(18px,3vw,30px);
@@ -353,23 +344,15 @@ img,video{max-width:100%;display:block}
 .wk-1 .week-num{color:var(--blue-dk)}
 .wk-2 .week-num{color:var(--accent)}
 
-/* the questions come at you from all three sides */
-.wk-field{
-  display:grid;grid-template-columns:repeat(3,1fr);align-items:start;
-  gap:clamp(26px,4vw,52px) clamp(16px,2.4vw,30px);
-  padding:clamp(24px,5vw,56px) 0 clamp(30px,6vw,80px);
-}
-.wk-field > *{min-width:0}
-/* stagger the columns so nothing lines up in tidy rows */
-.wk-field > *:nth-child(3n+2){margin-top:clamp(34px,7vw,110px)}
-.wk-field > *:nth-child(3n+3){margin-top:clamp(68px,13vw,210px)}
-.wk-field > *:nth-child(4n+1){transform-origin:center;rotate:-1.1deg}
-.wk-field > *:nth-child(4n+3){rotate:1.3deg}
-.wk-field > *:nth-child(6n+5){rotate:-.6deg}
+/* the questions come at you from every side, one at a time */
+.wk-field{position:relative;height:calc(var(--n) * 26vh);margin-top:clamp(20px,4vw,44px)}
+.wk-field > .q{position:absolute;left:var(--x);top:var(--y);width:var(--w);rotate:var(--rot)}
 
 .q,.beat-wrap,.bub-hero{opacity:0;transform:translateY(34px);
   transition:opacity .6s var(--ease),transform .6s var(--ease);}
 .q.in,.beat-wrap.in,.bub-hero.in{opacity:1;transform:none}
+.wk-field > .q{transform:translateY(34px) scale(.97)}
+.wk-field > .q.in{transform:none}
 .q-txt{font-size:clamp(13.5px,1.55vw,15.5px);line-height:1.45;font-weight:400}
 .q-txt em{font-style:normal;background:rgba(242,208,90,.5);padding:0 4px;border-radius:4px}
 
@@ -417,7 +400,7 @@ img,video{max-width:100%;display:block}
 .q-slack .q-txt{color:#D1D2D3}
 
 /* the one that lands */
-.q.is-punch{position:relative;rotate:0deg!important}
+.q.is-punch{rotate:0deg}
 .q.is-punch::after{content:'';position:absolute;inset:-5px;border-radius:inherit;
   box-shadow:0 0 0 2.5px var(--accent);opacity:.6;pointer-events:none}
 
@@ -578,8 +561,6 @@ img,video{max-width:100%;display:block}
   /* keep the rail to a single row, or it swallows the sticky week header */
   .pill-row{flex-wrap:nowrap;gap:9px}
   .search-pill{flex:1 1 auto}
-  .qcount-l{display:none}
-  .qcount{padding:11px 14px}
   .week-left{top:62px}
 }
 @media (max-width:560px){
@@ -635,17 +616,23 @@ img,video{max-width:100%;display:block}
 
 /* ─────────── responsive: weeks ─────────── */
 @media (max-width:1000px){
-  .wk-field{grid-template-columns:repeat(2,1fr)}
-  .wk-field > *:nth-child(3n+2),
-  .wk-field > *:nth-child(3n+3){margin-top:0}
-  .wk-field > *:nth-child(2n){margin-top:clamp(28px,6vw,70px)}
+  .wk-field > .q{width:calc(var(--w) + 16%)}
 }
-@media (max-width:640px){
-  .wk-field{grid-template-columns:1fr;gap:22px}
-  .wk-field > *{margin-top:0!important;rotate:0deg!important}
+@media (max-width:760px){
+  /* absolute scatter needs room a phone doesn't have — stack it */
+  .wk-field{height:auto;display:flex;flex-direction:column;gap:clamp(60px,16vh,130px);
+    padding:clamp(20px,5vh,50px) 0}
+  .wk-field > .q{position:static;width:100%;rotate:0deg}
+  .wk-field > .q:nth-child(even){margin-left:auto;width:94%}
+  .wk-field > .q:nth-child(odd){width:94%}
   .wk-head{padding-top:14px}
   .week-note{display:none}
   .beat-bub{width:100%;margin-left:0!important;margin-right:0!important}
   .sig{left:auto;right:4%;bottom:-18px;transform:rotate(-1.2deg)}
   .beat-b{text-align:left;margin-left:0}
+}
+
+/* the logo + word can't hold one line on a phone — must come after the base rule */
+@media (max-width:900px){
+  .spott-line{white-space:normal}
 }

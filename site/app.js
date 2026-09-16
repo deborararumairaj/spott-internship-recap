@@ -228,33 +228,23 @@ const WEEK1 = {
   note: 'I was thrown into the deep end.',
   qs: [
     ['google',  'what is a repository'],
-    ['chatgpt', 'how do i set up a github'],
     ['google',  'what is an ATS'],
     ['google',  'what is a recruitment agency'],
-    ['claude',  'what does Kevin mean by “put it in ordinal”'],
-    ['google',  'what does GTM stand for'],
-    ['chatgpt', 'what is a JSON file'],
-    ['google',  'what even is recruitment, like fundamentally'],
-    ['claude',  'explain what this company actually sells, like i am five'],
-    ['google',  'what is a CRM'],
-    ['chatgpt', 'how do i clone a repo'],
-    ['google',  'tech bro words i can use to sound like i know things'],
-    ['claude',  'what is the difference between a branch and a fork'],
-    ['google',  'basic terminal commands list'],
-    ['chatgpt', 'what does “ship it” actually mean at a startup'],
-    ['google',  'what is YC'],
-    ['claude',  'is “let us circle back” something people genuinely say'],
-    ['google',  'what is an API'],
-    ['chatgpt', 'how to sound confident in a standup meeting'],
     ['claude',  'what does Kevin mean by <em>this</em>'],
-    ['google',  'how long until you stop feeling like an impostor at a new job'],
+    ['google',  'what is an API'],
+    ['google',  'tech bro words i can use to sound like i know things'],
+    ['chatgpt', 'how do i clone a repo'],
+    ['google',  'what is a CRM'],
+    ['claude',  'explain what this company actually sells, like i am five'],
+    ['chatgpt', 'what is a JSON file'],
+    ['google',  'what does GTM stand for'],
     ['claude',  'is it normal to understand absolutely nothing on day three', 'punch'],
   ],
 };
 
 const WEEK2 = {
   title: "Now I'm a pro. At Claude, and at Spott.",
-  note: 'Two weeks in and I had opinions. Some of them were even correct.',
+  note: 'Two weeks in, I had opinions — and put both Spott and Claude to work.',
   beats: [
     {
       img: 'assets/img/valuation.jpg',
@@ -267,7 +257,7 @@ const WEEK2 = {
       img: 'assets/img/seat-upgraded.jpg',
       alt: 'Email: Your seat was upgraded — you now have more Claude usage',
       bub: 'pink',
-      b: 'You can call me Debloed now',
+      b: 'You can call me Deblaude now',
       p: 'Claude had become an integral part of my workflow. Who would have thought?',
     },
   ],
@@ -283,6 +273,13 @@ function weekHead(n, w) {
   </div>`;
 }
 
+/* left %, width % — tuned so nothing collides and the eye keeps moving */
+const SCATTER = [
+  [ 3, 34], [54, 38], [24, 36], [62, 33],
+  [ 5, 40], [39, 36], [66, 31], [13, 34],
+  [46, 41], [ 2, 36], [35, 34], [57, 39],
+];
+
 function buildWeeks() {
   const root = $('#weeks-root');
   const frag = document.createDocumentFragment();
@@ -293,7 +290,14 @@ function buildWeeks() {
   w1.innerHTML = `
     ${weekHead(1, WEEK1)}
     <div class="wrap wrap-wide">
-      <div class="wk-field">${WEEK1.qs.map(renderQ).join('')}</div>
+      <div class="wk-field" style="--n:${WEEK1.qs.length}">${
+        WEEK1.qs.map((q, i) => {
+          const [x, w] = SCATTER[i % SCATTER.length];
+          const y = 1 + i * (86 / (WEEK1.qs.length - 1));
+          const rot = [-1.1, 1.3, -.6, .9][i % 4];
+          return renderQ(q).replace('class="q ', `style="--x:${x}%;--w:${w}%;--y:${y}%;--rot:${rot}deg" class="q `);
+        }).join('')
+      }</div>
     </div>`;
   frag.appendChild(w1);
 
@@ -333,7 +337,7 @@ function observeAll() {
     });
   }, { rootMargin: '-12% 0px -18% 0px' });
 
-  $$('.q, .beat-wrap, .bub-hero').forEach(el => qObs.observe(el));
+  $$('.beat-wrap, .bub-hero').forEach(el => qObs.observe(el));
 
   /* stat counters */
   const sObs = new IntersectionObserver((entries) => {
@@ -354,24 +358,36 @@ function observeAll() {
   }, { threshold: .6 });
   $$('.stat-n').forEach(el => sObs.observe(el));
 
+  wireQueries();
   wireReveal();
   wireBlur();
-  settleCounter();
 }
 
-/* If you scroll fast enough, the observer misses a few. Land on the real number. */
-function settleCounter() {
-  const total = WEEK1.qs.length;
-  const blur  = $('#blur');
-  if (!blur) return;
-  new IntersectionObserver((e, o) => {
-    if (!e[0].isIntersecting || asked >= total) return;
-    o.disconnect();
-    const iv = setInterval(() => {
-      $('#qcount').textContent = ++asked;
-      if (asked >= total) clearInterval(iv);
-    }, 45);
-  }, { rootMargin: '0px 0px -40% 0px' }).observe(blur);
+/* ─────────── week 1: one query at a time, as you scroll ─────────── */
+function wireQueries() {
+  const qs = $$('.wk-field .q');
+  if (!qs.length) return;
+
+  let pending = false;
+  const check = () => {
+    pending = false;
+    const line = window.innerHeight * 0.82;
+    let left = false;
+    for (const el of qs) {
+      if (el.classList.contains('in')) continue;
+      if (el.getBoundingClientRect().top < line) el.classList.add('in');
+      else left = true;
+    }
+    if (!left) window.removeEventListener('scroll', onScroll);
+  };
+  const onScroll = () => {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(check);
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  check();
 }
 
 /* ─────────── "wondering how I got into Spott?" ─────────── */

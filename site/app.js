@@ -250,7 +250,7 @@ const WEEK2 = {
       img: 'assets/img/valuation.jpg',
       alt: 'Spott dashboard showing Total Revenue booked: €2,470,634,719.86',
       bub: 'blue',
-      b: 'Single-handedly took our valuation to €2 billion',
+      b: 'Single-handedly took our revenue to €2.4 billion',
       p: "Who needs to wait for Series B? You're welcome.",
     },
     {

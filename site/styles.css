@@ -144,6 +144,9 @@ img,video{max-width:100%;display:block}
 @keyframes eq{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
 .sound-toggle.is-muted .st-bars i{animation:none;transform:scaleY(.35);background:rgba(253,241,227,.4)}
 
+/* if the browser refused to autoplay, the button has to be noticed */
+.sound-toggle.is-nudging{animation:nudge 2.2s var(--ease) 3}
+
 /* ─────────── SITE REVEAL ─────────── */
 .site{opacity:0;animation:siteIn .9s var(--ease) .12s forwards}
 @keyframes siteIn{to{opacity:1}}

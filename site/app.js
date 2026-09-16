@@ -74,8 +74,34 @@ const WRONG = [
 ];
 let wrongIdx = 0;
 
+/* Browsers only allow sound to start from a user gesture, and hashing
+   the code means we `await` before we know whether to let anyone in —
+   by then the gesture is spent and play() is refused. So the moment
+   someone actually touches the gate we start the track and immediately
+   pause it: that counts as the gesture, and the element stays unlocked
+   for the real play() a few milliseconds later. */
+let audioPrimed = false, audioLive = false;
+function primeAudio() {
+  if (audioPrimed) return;
+  const a = $('#intro-audio');
+  if (!a) return;
+  audioPrimed = true;
+  a.muted = true;                   // the priming pass is silent
+  const p = a.play();
+  if (p) p.then(() => {
+            /* by the time this resolves the real play may already have
+               taken over — pausing then would kill the track */
+            if (!audioLive) { a.pause(); a.currentTime = 0; }
+            a.muted = false;
+          })
+          .catch(() => { audioPrimed = false; a.muted = false; });
+}
+['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
+  gate.addEventListener(ev, primeAudio, { once: false, passive: true }));
+
 $('#pass-form').addEventListener('submit', async e => {
   e.preventDefault();
+  primeAudio();                     // synchronous, still inside the gesture
   const input = $('#pass-input');
   if (await isGoodCode(input.value)) return enterSite();
   $('#pass-error').textContent = WRONG[wrongIdx++ % WRONG.length];
@@ -98,9 +124,15 @@ function wireAudio(autoplay) {
 
   toggle.hidden = false;
   if (autoplay) {
+    audioLive = true;               // stop the primer from pausing us
+    audio.muted = false;
+    audio.currentTime = 0;
     audio.play()
       .then(() => setState(false, 'sound on'))
-      .catch(() => setState(true, 'play audio'));   // browser blocked it; offer the button
+      .catch(() => {                                // blocked; make the button obvious
+        setState(true, 'play audio');
+        toggle.classList.add('is-nudging');
+      });
   } else {
     setState(true, 'play audio');
   }

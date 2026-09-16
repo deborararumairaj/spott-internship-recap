@@ -424,6 +424,17 @@ img,video{max-width:100%;display:block}
   box-shadow:0 12px 30px rgba(27,66,105,.22)}
 .beat-wrap:nth-child(even) .beat-bub{margin-left:-14px;margin-right:auto}
 
+/* the small afterthought hanging off the Deblaude beat */
+.beat-aside{display:flex;flex-direction:column;gap:14px;align-items:flex-start;
+  width:min(100%,400px);margin:16px 0 0 clamp(0px,3vw,38px)}
+.beat-aside .bub{width:100%}
+.aside-shot{margin:0;border-radius:14px;overflow:hidden;background:#fff;
+  box-shadow:0 8px 24px rgba(27,66,105,.16);align-self:stretch}
+.aside-shot img{width:100%;display:block}
+@media (max-width:900px){
+  .beat-aside{margin-left:0;width:100%}
+}
+
 /* ─────────── WEEKS 3 → NOW ─────────── */
 .blur{height:230vh;position:relative}
 .blur-sticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;

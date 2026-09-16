@@ -253,6 +253,12 @@ const WEEK2 = {
       bub: 'pink',
       b: 'You can call me Deblaude now',
       p: "Claude is the personal assistant I can finally have on my payroll (well — Spott's, but who's checking right). The intern's intern ;)",
+      aside: {
+        b: 'I even had to take Claude to the doctor a few times',
+        p: "Poor thing couldn't keep up with startup life.",
+        shot: 'assets/img/claude-doctor.jpg',
+        shotAlt: 'Claude, out of office and feeling unwell',
+      },
     },
   ],
 };
@@ -309,6 +315,11 @@ function buildWeeks() {
               <img src="${x.img}" alt="${x.alt}" loading="lazy">
             </figure>
             <div class="bub bub-${x.bub} bub-up beat-bub"><b>${x.b}</b><span>${x.p}</span></div>
+            ${x.aside ? `
+              <div class="beat-aside">
+                <div class="bub bub-yellow bub-up"><b>${x.aside.b}</b><span>${x.aside.p}</span></div>
+                <figure class="aside-shot"><img src="${x.aside.shot}" alt="${x.aside.shotAlt}" loading="lazy"></figure>
+              </div>` : ''}
           </div>`).join('')}
       </div>
     </div>`;
@@ -417,6 +428,13 @@ function wireClips() {
 
 /* The welcome-video stills may not be in the folder yet — don't show a broken image. */
 function wireStills() {
+  /* the aside shot simply isn't there until the screenshot lands */
+  $$('.aside-shot img').forEach(img => {
+    const hide = () => img.closest('figure').hidden = true;
+    if (img.complete && img.naturalWidth === 0) hide();
+    img.addEventListener('error', hide);
+  });
+
   $$('#stills img').forEach(img => {
     const mark = () => img.closest('figure').classList.add('empty');
     if (img.complete && img.naturalWidth === 0) mark();

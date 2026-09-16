@@ -175,163 +175,129 @@ function enterSite() {
    2. THE WEEKS
    ══════════════════════════════════════════════════ */
 
-const WEEKS = [
-  {
-    n: 1,
-    title: 'Absolutely no idea what is happening',
-    note: 'I had a laptop, a Slack account, and a job title with a letter combination in it that I had to look up.',
-    qs: [
-      ['google',  'what is a repository'],
-      ['chatgpt', 'how do i set up a github'],
-      ['google',  'what is an ATS'],
-      ['google',  'what is a recruitment agency'],
-      ['google',  'what even is recruitment, like fundamentally'],
-      ['claude',  'what does Kevin mean by <em>"put it in ordinal"</em>'],
-      ['google',  'tech bro words i can use to sound like i know things'],
-      ['chatgpt', 'what is a JSON file'],
-      ['claude',  'is it normal to understand nothing on day three', 'punch'],
-    ],
-  },
-  {
-    n: 2,
-    title: 'I figure out Claude',
-    note: 'Everything got faster. Alarmingly faster. I started on the onboarding docs and then did not really stop.',
-    qs: [
-      ['claude',  'read this Notion page and tell me what is actually wrong with it'],
-      ['google',  'what is Mintlify'],
-      ['claude',  'how do i write onboarding docs that someone will actually read'],
-      ['google',  'md vs mdx difference'],
-      ['claude',  'why is my sidebar not showing up'],
-      ['claude',  'why is my sidebar <em>STILL</em> not showing up'],
-      ['chatgpt', 'how do i screen record only one window on mac'],
-      ['me',      'hey Kevin. so. about my Claude usage limit.', 'punch'],
-    ],
-    shot: { img: 'assets/img/seat-upgraded.jpg', cap: 'By the end of week 2 they had to upgrade my seat. I consider this a KPI.' },
-  },
-  {
-    n: 3,
-    title: 'MCP, API keys, and other sounds',
-    note: 'Kevin used the words "MCP" and "API keys" in a single sentence and I wrote both of them down phonetically.',
-    qs: [
-      ['google',  'what is MCP'],
-      ['claude',  'what is an API key and why does everyone say it like that'],
-      ['claude',  'restructure these docs so a new hire can find anything in two clicks'],
-      ['claude',  'how do i get 40 minutes of interview down to six clips'],
-      ['google',  'how to frame a talking head shot'],
-      ['claude',  'write me five X posts that do not sound like a robot wrote them'],
-      ['kevin',   'X posts do feel really ai generated atm — do want to give approval first', 'punch'],
-    ],
-    shot: { img: 'assets/img/kevin-mcp.jpg', cap: 'He was right. It did 10x. It also cost me an entire afternoon.' },
-  },
-  {
-    n: 4,
-    title: 'Back, and faster',
-    note: 'I came back to a product that had moved, a docs site that was somehow mine, and a to-do list I had written for myself in a state of pure optimism.',
-    qs: [
-      ['claude',  'i have been away a week and a half, catch me up'],
-      ['claude',  'what changed in the product while i was gone'],
-      ['claude',  'how should a CS onboarding email sequence actually flow'],
-      ['google',  'how many onboarding emails is too many onboarding emails'],
-      ['claude',  'rewrite this so it sounds like a person and not a sequence'],
-      ['claude',  'help me check thirty links without opening thirty tabs'],
-      ['kevin',   'absolute machineee!! you did it for all accounts already?', 'punch'],
-    ],
-    shot: { img: 'assets/img/kevin-machine.jpg', cap: 'Printing this out. Laminating it. Putting it in my wallet.' },
-  },
-  {
-    n: 5,
-    title: 'Filming week',
-    note: 'Cameras. Framing. A 40-minute sit-down with Sebastian. A welcome video with CS. Nathan was out, so for a while I was also Nathan.',
-    qs: [
-      ['google',  'best lighting for an office interview with no lighting equipment'],
-      ['me',      'can you come and quickly check the framing for me?'],
-      ['claude',  'how do i cut a 40 minute recording without losing the good bits'],
-      ['claude',  'what do i do when someone says "just talk naturally" and i immediately forget how to talk'],
-      ['me',      'WE GOT THE SHOT!!! im so happy'],
-      ['kevin',   'the videos are fireee 🔥 damn', 'punch'],
-    ],
-    shot: { img: 'assets/img/kevin-videos-fire.jpg', cap: 'I peaked here and I am at peace with that.' },
-  },
-  {
-    n: 6,
-    title: 'The handover',
-    note: 'Writing it all down so that it outlives me — which is, I am reliably told, the entire point of onboarding documentation.',
-    qs: [
-      ['claude',  'what is the cleanest way to structure a handover'],
-      ['claude',  'what did i actually accomplish here, be honest with me'],
-      ['claude',  'help me build a website to recap my internship'],
-      ['google',  'how to deploy to vercel'],
-      ['claude',  'how do i encrypt a message so that only one specific person can open it'],
-      ['claude',  'is it weird to be sad about leaving a job i had for seven weeks', 'punch'],
-    ],
-  },
-];
+/* Little mock-ups of the things I actually typed into.
+   Each question renders as the real composer it was typed in. */
+const MARKS = {
+  google: `<svg class="m-g" viewBox="0 0 48 48" aria-hidden="true">
+    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`,
+  mic: `<svg class="m-i" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3z"/><path fill="#34A853" d="M18 12a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-2.07A8 8 0 0 0 20 12h-2z"/></svg>`,
+  lens: `<svg class="m-i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="#EA4335"/><path fill="#4285F4" d="M4 4h5v2H6v3H4V4zm11 0h5v5h-2V6h-3V4zM4 15h2v3h3v2H4v-5zm14 0h2v5h-5v-2h3v-3z"/></svg>`,
+  claude: `<svg class="m-c" viewBox="0 0 24 24" aria-hidden="true"><g stroke="#D97757" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></g></svg>`,
+  send: `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>`,
+};
 
-const INTERMISSION_AFTER = 3;
+function renderQ([src, text, mod]) {
+  const punch = mod === 'punch' ? ' is-punch' : '';
+  const t = `<span class="q-txt">${text}</span>`;
+
+  switch (src) {
+    case 'google':
+      return `<div class="q q-google${punch}">
+        ${MARKS.google}${t}
+        <span class="g-icons">${MARKS.mic}${MARKS.lens}</span>
+      </div>`;
+
+    case 'chatgpt':
+      return `<div class="q q-gpt${punch}">
+        <div class="gpt-top"><span class="chip">ChatGPT 5 <span aria-hidden="true">▾</span></span></div>
+        <div class="gpt-row">${t}<span class="gpt-send">${MARKS.send}</span></div>
+      </div>`;
+
+    case 'claude':
+      return `<div class="q q-claude${punch}">
+        <div class="cl-row">${MARKS.claude}${t}</div>
+        <div class="cl-bottom"><span class="chip chip-cl">Claude Opus <span aria-hidden="true">▾</span></span><span class="cl-send">${MARKS.send}</span></div>
+      </div>`;
+
+    default: /* slack */
+      return `<div class="q q-slack${punch}">
+        <span class="sl-av" data-who="${src}" aria-hidden="true"></span>
+        <div class="sl-body">
+          <p class="sl-head"><b>${src === 'me' ? 'Debora' : 'Kevin'}</b><time>${src === 'me' ? '4:25 PM' : '1:49 PM'}</time></p>
+          ${t}
+        </div>
+      </div>`;
+  }
+}
+
+const WEEK1 = {
+  n: 1,
+  title: 'Absolutely no idea what is happening',
+  note: 'I had a laptop, a Slack account, and a job title with a letter combination in it that I had to look up.',
+  qs: [
+    ['google',  'what is a repository'],
+    ['chatgpt', 'how do i set up a github'],
+    ['google',  'what is an ATS'],
+    ['google',  'what is a recruitment agency'],
+    ['claude',  'what does Kevin mean by “put it in ordinal”'],
+    ['google',  'tech bro words i can use to sound like i know things'],
+    ['chatgpt', 'what is a JSON file'],
+    ['google',  'what even is recruitment, like fundamentally'],
+    ['claude',  'is it normal to understand absolutely nothing on day three', 'punch'],
+  ],
+};
+
+const WEEK2 = {
+  n: 2,
+  title: "By now I'm a pro. At Claude, and at Spott.",
+  note: 'Two weeks in and I had opinions. Some of them were even correct.',
+  beats: [
+    {
+      img: 'assets/img/valuation.jpg',
+      alt: 'Spott dashboard showing Total Revenue booked: €2,470,634,719.86',
+      bub: 'blue',
+      b: 'Single-handedly took our valuation to €2 billion',
+      p: "Who needs to wait for Series B? You're welcome.",
+    },
+    {
+      img: 'assets/img/seat-upgraded.jpg',
+      alt: 'Email: Your seat was upgraded — you now have more Claude usage',
+      bub: 'pink',
+      b: 'Also by now, they had to upgrade my Claude',
+      p: 'I was, let us say, using it.',
+    },
+  ],
+};
 
 function buildWeeks() {
   const root = $('#weeks-root');
   const frag = document.createDocumentFragment();
 
-  WEEKS.forEach(w => {
-    const sec = document.createElement('div');
-    sec.className = `wrap wrap-wide week week-${w.n}`;
-    sec.innerHTML = `
-      <div class="week-left">
-        <p class="week-num">Week ${w.n}</p>
-        <h3 class="week-title">${w.title}</h3>
-        <p class="week-note">${w.note}</p>
-      </div>
-      <div class="q-stack">
-        ${w.qs.map(([src, text, mod]) => `
-          <div class="q${mod === 'punch' ? ' q-punch' : ''}">
-            <span class="q-src" data-src="${src}">${src === 'me' ? 'me' : src}</span>
-            <span class="q-txt">${text}</span>
-          </div>`).join('')}
-        ${w.shot ? `
-          <figure class="q-shot">
-            <img src="${w.shot.img}" alt="" loading="lazy">
-            <figcaption>${w.shot.cap}</figcaption>
-          </figure>` : ''}
-      </div>`;
-    frag.appendChild(sec);
+  /* week 1 — the questions */
+  const w1 = document.createElement('div');
+  w1.className = 'wrap wrap-wide week week-1';
+  w1.innerHTML = `
+    <div class="week-left">
+      <p class="week-num">Week 1</p>
+      <h3 class="week-title">${WEEK1.title}</h3>
+      <p class="week-note">${WEEK1.note}</p>
+    </div>
+    <div class="q-stack">${WEEK1.qs.map(renderQ).join('')}</div>`;
+  frag.appendChild(w1);
 
-    if (w.n === INTERMISSION_AFTER) {
-      const int = document.createElement('div');
-      int.className = 'wrap wrap-wide';
-      int.innerHTML = `
-        <div class="intermission">
-          <h3>Intermission — a week and a half, off.</h3>
-          <p>Somewhere in the middle of all of this I took a week and a half off. I would like to report that I switched off completely and thought about none of it. I would like to report that.</p>
-        </div>`;
-      frag.appendChild(int);
-    }
-  });
+  /* week 2 — the two moments */
+  const w2 = document.createElement('div');
+  w2.className = 'wrap wrap-wide week week-2';
+  w2.innerHTML = `
+    <div class="week-left">
+      <p class="week-num">Week 2</p>
+      <h3 class="week-title">${WEEK2.title}</h3>
+      <p class="week-note">${WEEK2.note}</p>
+    </div>
+    <div class="q-stack">
+      ${WEEK2.beats.map(x => `
+        <figure class="beat">
+          <img src="${x.img}" alt="${x.alt}" loading="lazy">
+        </figure>
+        <div class="bub bub-${x.bub}"><b>${x.b}</b><span>${x.p}</span></div>
+      `).join('')}
+    </div>`;
+  frag.appendChild(w2);
 
   root.appendChild(frag);
-}
-
-/* ─────────── the typing search pill ─────────── */
-let typeToken = 0, lastType = 0;
-function setPill(text) {
-  const el = $('#pill-text');
-  const plain = text.replace(/<[^>]+>/g, '');
-  const me = ++typeToken;
-  const now = performance.now();
-  const instant = now - lastType < 260;          // fast scrolling? don't queue up a typing traffic jam
-  lastType = now;
-
-  if (instant || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    el.textContent = plain;
-    return;
-  }
-  el.textContent = '';
-  let i = 0;
-  (function step() {
-    if (me !== typeToken) return;
-    el.textContent = plain.slice(0, ++i);
-    if (i < plain.length) setTimeout(step, 14);
-  })();
 }
 
 /* ─────────── reveal on scroll ─────────── */
@@ -342,15 +308,13 @@ function observeAll() {
       if (!e.isIntersecting || e.target.classList.contains('in')) return;
       e.target.classList.add('in');
       if (e.target.classList.contains('q')) {
-        asked++;
-        $('#qcount').textContent = asked;
-        setPill($('.q-txt', e.target).innerHTML);
+        $('#qcount').textContent = ++asked;
       }
       qObs.unobserve(e.target);
     });
-  }, { rootMargin: '-45% 0px -20% 0px' });
+  }, { rootMargin: '-40% 0px -25% 0px' });
 
-  $$('.q, .q-shot').forEach(el => qObs.observe(el));
+  $$('.q, .beat, .week .bub').forEach(el => qObs.observe(el));
 
   /* stat counters */
   const sObs = new IntersectionObserver((entries) => {
@@ -370,6 +334,57 @@ function observeAll() {
     });
   }, { threshold: .6 });
   $$('.stat-n').forEach(el => sObs.observe(el));
+
+  wireReveal();
+  wireBlur();
+}
+
+/* ─────────── "wondering how I got into Spott?" ─────────── */
+function wireReveal() {
+  const btn  = $('#reveal-btn');
+  const body = $('#reveal-body');
+  if (!btn || !body) return;
+  btn.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    body.hidden = open;
+    $('#reveal').classList.toggle('is-open', !open);
+    if (!open) requestAnimationFrame(() => body.classList.add('in'));
+  });
+}
+
+/* ─────────── weeks 3 → now, blurring past ─────────── */
+const BLUR_SEQ = ['3', '4', '5', '6', '7', 'now'];
+function wireBlur() {
+  const sec  = $('#blur');
+  const num  = $('#blur-num');
+  const pre  = $('#blur-pre');
+  const post = $('#blur-post');
+  if (!sec) return;
+
+  let last = -1;
+  const onScroll = () => {
+    const r = sec.getBoundingClientRect();
+    const span = r.height - window.innerHeight;
+    if (span <= 0) return;
+    const p = Math.min(1, Math.max(0, -r.top / span));
+
+    /* ease so the early weeks fly and it lands hard on "now" */
+    const eased = Math.pow(p, .62);
+    const i = Math.min(BLUR_SEQ.length - 1, Math.floor(eased * BLUR_SEQ.length));
+    if (i === last) return;
+    last = i;
+
+    const isNow = BLUR_SEQ[i] === 'now';
+    num.textContent = BLUR_SEQ[i];
+    num.classList.toggle('is-now', isNow);
+    pre.textContent  = isNow ? 'and suddenly it was' : 'and then week';
+    post.textContent = isNow ? "…and that's today." : '…and I blinked.';
+    num.classList.remove('tick'); void num.offsetWidth; num.classList.add('tick');
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 }
 
 /* ══════════════════════════════════════════════════

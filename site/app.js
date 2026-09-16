@@ -16,9 +16,9 @@ const CONFIG = {
   gateEnabled: true,
 
   /* The one moment, same for everyone.
-     Wed 16 Sep 2026, 18:30 Brussels (CEST = UTC+2) → 16:30 UTC.
+     Wed 16 Sep 2026, 18:35 Brussels (CEST = UTC+2) → 16:35 UTC.
      Change this one line to move the unlock.                     */
-  unlockAt: '2026-09-16T16:30:00Z',
+  unlockAt: '2026-09-16T16:35:00Z',
 
   /* The codes themselves are NOT in this file. These are SHA-256 of the
      normalised codes, so reading the source doesn't hand them over.
@@ -26,8 +26,8 @@ const CONFIG = {
      ignored before hashing — so the @ and the dash are optional.
      To add one: sha256(code.toLowerCase().replace(/[^a-z0-9]/g,''))
 
-       [0] the front door — the code everyone is given
-       [1] Debora's own, for getting in before the clock runs out      */
+       [0] the front door — works from the unlock moment onwards
+       [1] Debora's own — works whenever, so she can keep testing       */
   codeHashes: [
     '6cc4edfa71ce6c0ab0b4869fcfe31269e87359529297a68026755f1b655e5d97',
     '50e6ce81c4a0a7dfd8b032f795f5916c8d32ec6e96f9961cff7136578422ce5c',
@@ -43,11 +43,16 @@ const sha256Hex = async (s) => {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
 };
-const isGoodCode = async (raw) => {
+/* -1 nothing, 0 the front door, 1 hers */
+const whichCode = async (raw) => {
   const norm = softMatch(raw);
-  if (!norm) return false;
-  return CONFIG.codeHashes.includes(await sha256Hex(norm));
+  if (!norm) return -1;
+  return CONFIG.codeHashes.indexOf(await sha256Hex(norm));
 };
+/* The front door only opens once the clock has run out. Hers opens
+   whenever — otherwise she'd be locked out of her own page. */
+const opensNow = (i) => i === 1 || (i === 0 && Date.now() >= unlockTs);
+const isGoodCode = async (raw) => opensNow(await whichCode(raw));
 
 /* ══════════════════════════════════════════════════
    1. THE GATE
@@ -80,31 +85,37 @@ let wrongIdx = 0;
    someone actually touches the gate we start the track and immediately
    pause it: that counts as the gesture, and the element stays unlocked
    for the real play() a few milliseconds later. */
-let audioPrimed = false, audioLive = false;
-function primeAudio() {
-  if (audioPrimed) return;
+/* Sound can only start from a user gesture, and hashing the password
+   means we `await` before we know whether to let anyone in — by then
+   the gesture is spent and play() is refused. So the track starts the
+   instant the form is submitted, before any await, and gets paused
+   again if the password turns out to be wrong. */
+let audioLive = false;
+function startAudio() {
   const a = $('#intro-audio');
   if (!a) return;
-  audioPrimed = true;
-  a.muted = true;                   // the priming pass is silent
+  a.muted = false;
   const p = a.play();
-  if (p) p.then(() => {
-            /* by the time this resolves the real play may already have
-               taken over — pausing then would kill the track */
-            if (!audioLive) { a.pause(); a.currentTime = 0; }
-            a.muted = false;
-          })
-          .catch(() => { audioPrimed = false; a.muted = false; });
+  if (p) p.catch(() => {});
 }
-['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
-  gate.addEventListener(ev, primeAudio, { once: false, passive: true }));
+function stopAudio() {
+  const a = $('#intro-audio');
+  if (!a || audioLive) return;
+  a.pause();
+  a.currentTime = 0;
+}
 
 $('#pass-form').addEventListener('submit', async e => {
   e.preventDefault();
-  primeAudio();                     // synchronous, still inside the gesture
+  startAudio();                     // synchronous: still inside the gesture
   const input = $('#pass-input');
-  if (await isGoodCode(input.value)) return enterSite();
-  $('#pass-error').textContent = WRONG[wrongIdx++ % WRONG.length];
+  const which = await whichCode(input.value);
+  if (opensNow(which)) return enterSite();
+  stopAudio();                      // wrong code, so wind it back
+  /* right password, wrong moment — say so rather than calling it wrong */
+  $('#pass-error').textContent = which === 0
+    ? "That's the password. It just isn't time yet."
+    : WRONG[wrongIdx++ % WRONG.length];
   panelPass.classList.remove('shake');
   void panelPass.offsetWidth;
   panelPass.classList.add('shake');
@@ -124,15 +135,18 @@ function wireAudio(autoplay) {
 
   toggle.hidden = false;
   if (autoplay) {
-    audioLive = true;               // stop the primer from pausing us
+    audioLive = true;
     audio.muted = false;
-    audio.currentTime = 0;
-    audio.play()
-      .then(() => setState(false, 'sound on'))
-      .catch(() => {                                // blocked; make the button obvious
-        setState(true, 'play audio');
-        toggle.classList.add('is-nudging');
-      });
+    if (!audio.paused) {            // the submit already got it going
+      setState(false, 'sound on');
+    } else {
+      audio.play()
+        .then(() => setState(false, 'sound on'))
+        .catch(() => {              // no gesture to spend (e.g. a ?code= link)
+          setState(true, 'play audio');
+          toggle.classList.add('is-nudging');
+        });
+    }
   } else {
     setState(true, 'play audio');
   }

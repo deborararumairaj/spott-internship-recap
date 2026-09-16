@@ -245,14 +245,14 @@ const WEEK2 = {
       alt: 'Spott dashboard showing Total Revenue booked: €2,470,634,719.86',
       bub: 'blue',
       b: 'Single-handedly took our revenue to €2.4 billion',
-      p: "Who needs to wait for Series B? You're welcome.",
+      p: "Series B will end up coming sooner than you think. You're welcome.",
     },
     {
       img: 'assets/img/seat-upgraded.jpg',
       alt: 'Email: Your seat was upgraded — you now have more Claude usage',
       bub: 'pink',
       b: 'You can call me Deblaude now',
-      p: "Claude is the personal assistant I couldn't afford. The intern's intern, if you would ;)",
+      p: "Claude is the personal assistant I can finally have on my payroll (well — Spott's, but who's checking right). The intern's intern ;)",
     },
   ],
 };
@@ -467,9 +467,9 @@ function wireBlur() {
       post.textContent = '';
     } else if (v === 'now') {
       word.textContent = '';
-      num.textContent  = 'now';
+      num.textContent  = 'today';
       pre.textContent  = 'and suddenly it was';
-      post.textContent = "…and that's today.";
+      post.textContent = "…and it's the end.";
     } else {
       word.textContent = 'Week';
       num.textContent  = v;

@@ -10,6 +10,17 @@ Plain static HTML/CSS/JS. No build step, no framework, no dependencies.
 
 ## The three things you'll actually want to change
 
+### 0. The gate is currently OFF
+
+`site/app.js`, very first line of `CONFIG`:
+
+```js
+gateEnabled: false,   // site opens straight up, no countdown, no passcode
+```
+
+Flip it to `true` on launch day and the countdown + passcode come back exactly
+as they were.
+
 ### 1. When it unlocks
 
 `site/app.js`, first block:

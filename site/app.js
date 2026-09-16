@@ -3,6 +3,12 @@
    ══════════════════════════════════════════════════ */
 
 const CONFIG = {
+  /* ┌──────────────────────────────────────────────────────┐
+     │  false = no countdown, no passcode, site just opens. │
+     │  Flip to true to put the gate back for launch day.   │
+     └──────────────────────────────────────────────────────┘ */
+  gateEnabled: false,
+
   /* The one moment, same for everyone.
      Fri 18 Sep 2026, 17:00 Brussels (CEST = UTC+2) → 15:00 UTC.
      Change this one line to move the unlock.                     */
@@ -35,25 +41,27 @@ const unlockTs  = new Date(CONFIG.unlockAt).getTime();
 /* Playful "please wait" lines. Half of these are real Claude Code
    spinner words, which is the joke. */
 const SPINNERS = [
-  ['Tinkering…',      '(still thinking)'],
-  ['Shenaniganing…',  '(17s · ↓ 550 tokens)'],
-  ['Synthesizing…',   '(1m 34s · still thinking)'],
-  ['Crunching…',      '(1h 18m 33s)'],
-  ['Building builds…','(in the background)'],
-  ['Percolating…',    '(do not refresh)'],
-  ['Marinating…',     '(it needs the time)'],
-  ['Compiling…',      '(vibes, mostly)'],
-];
+  ['Tinkering…',        '(still thinking)'],
+  ['Shenaniganing…',    '(17s · ↓ 550 tokens)'],
+  ['Synthesizing…',     '(1m 34s · still thinking)'],
+  ['Crunching…',        '(1h 18m 33s and counting)'],
+  ['Building builds…',  '(in the background)'],
+  ['Shipping…',         '(80% of it, anyway)'],
+  ['Deploying…',        '(mid-flight)'],
+  ['Percolating…',      '(do not refresh)'],
+  ['Iterating…',        '(on the thing you are waiting for)'],
+]
 
 const PLEADS = [
-  "I know you're really curious to know about my internship. Please wait — it's building builds in the background.",
-  "Please wait. It's tinkering. It genuinely cannot be rushed.",
+  "Why the countdown? Because I am still finishing it. In the backend. Right now, probably.",
+  "We are building the plane while flying it. You, of all people, know exactly what that means.",
+  "Startup world is 80/20. You are currently waiting on the 20.",
+  "I could have shipped it half-done. I did. That's what this screen is.",
+  "This isn't loading. It's being written. The difference is me, typing.",
+  "Somewhere in this file is an encrypted message with your name on it. It also isn't finished.",
   "You are early. That is a compliment and an inconvenience.",
-  "This is not loading. This is waiting. There is a difference and the difference is on purpose.",
-  "Seven weeks took seven weeks. You can do this.",
-  "No, the passcode won't help you yet. The box isn't even there.",
-  "Somewhere in this file there is an encrypted message with your name on it. Sit tight.",
-];
+  "Please wait. It's tinkering. It genuinely cannot be rushed.",
+]
 
 let spinIdx = 0, pleadIdx = 0;
 function rotateFlavour() {
@@ -85,8 +93,7 @@ function tickGate() {
   const left = unlockTs - Date.now();
   if (left <= 0) { clearInterval(gateTimer); showPasscode(); return; }
   const s = Math.floor(left / 1000);
-  $('#cd-d').textContent = pad(Math.floor(s / 86400));
-  $('#cd-h').textContent = pad(Math.floor(s / 3600) % 24);
+  $('#cd-h').textContent = pad(Math.floor(s / 3600));   // total hours, no days column
   $('#cd-m').textContent = pad(Math.floor(s / 60) % 60);
   $('#cd-s').textContent = pad(s % 60);
 }
@@ -118,59 +125,50 @@ $('#pass-form').addEventListener('submit', e => {
 });
 
 /* ─────────── entering ─────────── */
-function enterSite() {
-  clearInterval(gateTimer);
-  clearInterval(flavourTimer);
-  gate.classList.add('is-gone');
-  document.body.classList.remove('is-locked');
-  $('#site').hidden = false;
-
+function wireAudio(autoplay) {
   const audio  = $('#intro-audio');
   const toggle = $('#sound-toggle');
-  audio.play().then(() => {
-    toggle.hidden = false;                       // only offer the control if it actually played
-  }).catch(() => {
-    toggle.hidden = false;
-    toggle.classList.add('is-muted');
-    $('.st-label', toggle).textContent = 'play audio';
-  });
+  const label  = $('.st-label', toggle);
+
+  const setState = (muted, text) => {
+    toggle.classList.toggle('is-muted', muted);
+    label.textContent = text;
+  };
+
+  toggle.hidden = false;
+  if (autoplay) {
+    audio.play()
+      .then(() => setState(false, 'sound on'))
+      .catch(() => setState(true, 'play audio'));   // browser blocked it; offer the button
+  } else {
+    setState(true, 'play audio');
+  }
 
   toggle.addEventListener('click', () => {
-    if (audio.paused) {
-      audio.play().catch(() => {});
-      toggle.classList.remove('is-muted');
-      $('.st-label', toggle).textContent = 'sound on';
-    } else {
-      audio.pause();
-      toggle.classList.add('is-muted');
-      $('.st-label', toggle).textContent = 'sound off';
-    }
+    if (audio.paused) { audio.play().catch(() => {}); setState(false, 'sound on'); }
+    else              { audio.pause();                setState(true,  'sound off'); }
   });
   audio.addEventListener('ended', () => {
-    toggle.classList.add('is-muted');
-    $('.st-label', toggle).textContent = 'replay';
     audio.currentTime = 0;
+    setState(true, 'replay');
   });
+}
 
-  setTimeout(() => { gate.remove(); }, 900);
+function revealSite(autoplayAudio) {
+  document.body.classList.remove('is-locked');
+  $('#site').hidden = false;
+  wireAudio(autoplayAudio);
   buildWeeks();
   observeAll();
   loadVault();
 }
 
-/* boot the gate */
-renderWhen();
-rotateFlavour();
-flavourTimer = setInterval(rotateFlavour, 4200);
-tickGate();
-gateTimer = setInterval(tickGate, 1000);
-
-/* Preview hatch for Debora before launch: ?preview=1 skips the countdown
-   but NOT the passcode — so it's only useful to someone who already
-   knows the three words. */
-if (new URLSearchParams(location.search).has('preview')) {
+function enterSite() {
   clearInterval(gateTimer);
-  showPasscode();
+  clearInterval(flavourTimer);
+  gate.classList.add('is-gone');
+  setTimeout(() => gate.remove(), 900);
+  revealSite(true);
 }
 
 /* ══════════════════════════════════════════════════
@@ -485,4 +483,28 @@ function showLetter({ name, message }) {
       else setTimeout(nextPara, 240);
     })();
   })();
+}
+
+
+/* ══════════════════════════════════════════════════
+   4. BOOT
+   Declared last so everything above it exists.
+   ══════════════════════════════════════════════════ */
+
+if (CONFIG.gateEnabled) {
+  renderWhen();
+  rotateFlavour();
+  flavourTimer = setInterval(rotateFlavour, 4200);
+  tickGate();
+  gateTimer = setInterval(tickGate, 1000);
+
+  /* Preview hatch before launch: ?preview=1 skips the countdown but NOT the
+     passcode — only useful to someone who already knows the three words. */
+  if (new URLSearchParams(location.search).has('preview')) {
+    clearInterval(gateTimer);
+    showPasscode();
+  }
+} else {
+  gate.remove();
+  revealSite(false);        // no gesture to autoplay off, so just offer the button
 }

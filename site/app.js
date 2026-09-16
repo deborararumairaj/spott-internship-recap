@@ -405,7 +405,7 @@ function wireReveal() {
 }
 
 /* ─────────── weeks 3 → now, blurring past ─────────── */
-const BLUR_SEQ = ['3', '4', '5', '6', '7', 'blink', 'now'];
+const BLUR_SEQ = ['3', '4', '5', 'blink', 'now'];
 function wireBlur() {
   const sec  = $('#blur');
   const word = $('#blur-word');

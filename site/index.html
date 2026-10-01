@@ -35,6 +35,7 @@
       </div>
 
       <p class="gate-when" id="gate-when"></p>
+      <p class="gate-sound">🔊 Make sure your sound is on</p>
 
       <form id="pass-form" class="pass-form" autocomplete="off">
         <input id="pass-input" class="pass-input" type="text" placeholder="Enter your password here" aria-label="Password" autocapitalize="off" autocorrect="off" spellcheck="false">
@@ -52,7 +53,7 @@
 <!-- Preloaded up front, so it starts the instant the password lands —
      that submit is the gesture the browser needs. -->
 <audio id="intro-audio" preload="auto" playsinline>
-  <source src="assets/audio/intro.mp3?v=2" type="audio/mpeg">
+  <source src="assets/audio/intro.mp3?v=3" type="audio/mpeg">
 </audio>
 <button id="sound-toggle" class="sound-toggle" hidden aria-label="Toggle sound">
   <span class="st-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -206,7 +207,7 @@
             <p>Who doesn't love seeing the CS team, amiright? I'll take any excuse to put them anywhere ;) So I filmed and edited a welcome video with them, introducing people to the new Mintlify onboarding landing page and what they'll find there.</p>
             <figure class="work-shot work-shot-vid">
               <div class="vcrop vcrop-welcome">
-                <video class="clip" data-src="assets/video/welcome.mp4" preload="none"
+                <video class="clip" data-src="assets/video/welcome.mp4?v=2" preload="none"
                        muted loop playsinline controls disablepictureinpicture
                        controlslist="nodownload noplaybackrate"
                        aria-label="The welcome video, filmed and edited with the CS team"></video>

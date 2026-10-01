@@ -116,6 +116,10 @@ img,video{max-width:100%;display:block}
 .gate-when{
   font-size:15px;color:rgba(253,241,227,.55);margin:0 0 30px;font-weight:500;
 }
+.gate-when:has(+ .gate-sound){margin-bottom:14px}
+.gate-sound{
+  font-size:15px;color:#fff;margin:0 0 30px;font-weight:600;
+}
 .gate-fineprint{
   font-size:13px;line-height:1.55;color:rgba(253,241,227,.36);
   margin:26px auto 0;max-width:30em;font-weight:500;
@@ -491,8 +495,8 @@ img,video{max-width:100%;display:block}
 /* 1112x720 — 56px of menu bar and CapCut chrome off the top. Only the
    top is cropped: the native controls live at the foot of the video. */
 .vcrop-cap{--ar:1112/664;--shift:8.434%;--vh:108.43%}
-/* 1280x720 — just the letterbox band off the top of the welcome video */
-.vcrop-welcome{--ar:1280/700;--shift:2.857%;--vh:102.86%}
+/* 1920x1080 — full frame, nothing cropped */
+.vcrop-welcome{--ar:16/9;--shift:0%;--vh:100%}
 
 .ba .vcrop{box-shadow:0 6px 20px rgba(0,0,0,.18)}
 

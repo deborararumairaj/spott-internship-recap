@@ -88,12 +88,9 @@ function tickGate() {
   $('#cd-s').textContent = pad(s % 60);
 }
 
+/* Kept vague on purpose — no date, no timezone conversion. */
 function renderWhen() {
-  const d = new Date(unlockTs);
-  const opts = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
-  let local;
-  try { local = d.toLocaleString(undefined, opts); } catch { local = d.toString(); }
-  $('#gate-when').textContent = `${local} — the minute my internship officially ends`;
+  $('#gate-when').textContent = 'Wednesday at 6:45 pm — the minute my internship officially ends';
 }
 
 const WRONG = [
